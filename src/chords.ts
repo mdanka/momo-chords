@@ -1,9 +1,10 @@
 import { IChord } from "./types";
 import { Naming } from "./naming";
+import { ChordParser } from "./chordParser";
 
 export class Chords {
-    public parse(_value: string): IChord | undefined {
-        return;
+    public parse(value: string): IChord | undefined {
+        return ChordParser.parse(value);
     }
 
     public isChord(value: string): boolean {
@@ -16,17 +17,33 @@ export class Chords {
         let name: string = "";
         name += rootNote;
         if (interval !== undefined) {
-            name += Naming.intervals[interval][0];
+            const intervalNames = Naming.intervals.get(interval);
+            if (intervalNames === undefined) {
+                throw new Error(`[Chords] No name found for interval ${interval}`);
+            }
+            name += intervalNames[0];
         } else {
-            name += Naming.qualities[quality][0];
+            const qualityNames = Naming.qualities.get(quality);
+            if (qualityNames === undefined) {
+                throw new Error(`[Chords] No name found for quality ${quality}`);
+            }
+            name += qualityNames[0];
         }
 
         if (added !== undefined) {
-            name += Naming.addeds[added][0];
+            const addedNames = Naming.addeds.get(added);
+            if (addedNames === undefined) {
+                throw new Error(`[Chords] No name found for added ${added}`);
+            }
+            name += addedNames[0];
         }
 
         if (suspended !== undefined) {
-            name += Naming.suspendeds[suspended][0];
+            const suspendedNames = Naming.suspendeds.get(suspended);
+            if (suspendedNames === undefined) {
+                throw new Error(`[Chords] No name found for suspended ${suspended}`);
+            }
+            name += suspendedNames[0];
         }
 
         if (bassNote !== undefined) {
@@ -37,6 +54,7 @@ export class Chords {
     }
 
     public search(_query: string): IChord[] {
+        // TODO(mdanka): implement lookup
         return [];
     }
 }

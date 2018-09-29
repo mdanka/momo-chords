@@ -1,4 +1,4 @@
-// entry point to export your own stuff ;)
-
-export { another } from "./another"
-export default 5
+export * from "./types";
+export * from "./naming";
+export * from "./chordParser";
+export * from "./chords";

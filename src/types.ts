@@ -1,5 +1,5 @@
-export enum Note {
-    Ab = "Ab",
+export enum Notes {
+    AFlat = "Ab",
     A = "A",
     ASharp = "A#",
     BFlat = "Bb",
@@ -17,18 +17,18 @@ export enum Note {
     G = "G",
     GSharp = "G#",
 }
+export type Note = keyof typeof Notes;
 
-// export type Quality = "Major" | "Minor" | "Augmented" | "Diminished" | "Power";
-export enum Quality {
+export enum Qualities {
     Major = "Major",
     Minor = "Minor",
     Augmented = "Augmented",
     Diminished = "Diminished",
     Power = "Power",
 }
-// export type Quality = (typeof Qualities)[keyof typeof Qualities];
+export type Quality = keyof typeof Qualities;
 
-export enum Interval {
+export enum Intervals {
     Major7 = "Major7",
     Minor7 = "Minor7",
     Dominant7 = "Dominant7",
@@ -39,43 +39,47 @@ export enum Interval {
     AugmentedDominant7 = "AugmentedDominant7",
     AugmentedMajor7 = "AugmentedMajor7",
 }
+export type Interval = keyof typeof Intervals;
 
-export enum Added {
+export enum Addeds {
     Add9 = "Add9",
     Add11 = "Add11",
     Major6 = "Major6",
     SixNine = "SixNine",
 }
+export type Added = keyof typeof Addeds;
 
-export enum Suspended {
+export enum Suspendeds {
     Sus4 = "Sus4",
     Sus2 = "Sus2",
 }
+export type Suspended = keyof typeof Suspendeds;
 
 export interface IChord {
     /**
      * The main note
      */
-    rootNote: Note;
+    rootNote: Notes;
 
-    quality: Quality;
+    quality: Qualities;
 
-    interval: Interval | undefined;
+    interval: Intervals | undefined;
 
-    added: Added | undefined;
+    added: Addeds | undefined;
 
-    suspended: Suspended | undefined;
+    suspended: Suspendeds | undefined;
 
     /**
      * For example: C/G
      */
-    bassNote: Note | undefined;
+    bassNote: Notes | undefined;
 }
 
 export interface INamedChord extends IChord {
     name: string;
 }
 
+// TODO(mdanka): add naming options for printing
 // export interface IChordNamingOption {
 //     augmented: "aug" | "+";
 //     diminished: "dim" | "°";
