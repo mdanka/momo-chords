@@ -1,0 +1,48 @@
+{
+    "name": "guitar",
+    "version": "0.1.0",
+    "main": "./lib/index.js",
+    "typings": "./lib/index.d.ts",
+    "author": "Miklos Danka",
+    "scripts": {
+        "bundle": "webpack",
+        "clean": "rimraf dist lib",
+        "lint": "tslint -c tslint.json `find src -name '*.ts'`",
+        "lint-fix": "tslint --fix -c tslint.json `find src -name '*.ts'`",
+        "prepublish": "rimraf ./lib && tsc -d",
+        "test": "mocha test/**.ts --require ts-node/register",
+        "test-start": "karma start",
+        "watch": "webpack -w"
+    },
+    "dependencies": {
+        "classnames": "^2.2.5",
+        "commonjs": "^0.0.1",
+        "es6-shim": "^0.35.3",
+        "immutable": "^3.8.2"
+    },
+    "devDependencies": {
+        "@types/chai": "^3.4.35",
+        "@types/classnames": "^0.0.32",
+        "@types/es6-shim": "^0.31.33",
+        "@types/mocha": "^2.2.40",
+        "awesome-typescript-loader": "^3.1.2",
+        "chai": "^3.5.0",
+        "karma": "^1.5.0",
+        "karma-chai": "^0.1.0",
+        "karma-chrome-launcher": "^2.0.0",
+        "karma-mocha": "^1.0.1",
+        "karma-typescript-preprocessor": "^0.3.1",
+        "karma-webpack": "^2.0.3",
+        "mocha": "^3.2.0",
+        "prettier": "^1.14.2",
+        "rimraf": "^2.5.4",
+        "ts-node": "^7.0.1",
+        "tslint": "^5.11.0",
+        "tslint-config-prettier": "^1.6.0",
+        "tslint-plugin-prettier": "^1.3.0",
+        "tslint-react": "^3.6.0",
+        "typescript": "^2.1.0",
+        "webpack": "^2.2.0",
+        "webpack-dev-server": "^2.2.0"
+    }
+}
