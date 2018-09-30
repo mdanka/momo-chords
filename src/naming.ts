@@ -59,16 +59,6 @@ export namespace Naming {
     export const addedsLookup = mapToLookup(addeds);
     export const suspendedsLookup = mapToLookup(suspendeds);
 
-    export const intervalToQuality: Map<Intervals, Qualities> = new Map([
-        [Intervals.Major7, Qualities.Major],
-        [Intervals.Minor7, Qualities.Minor],
-        [Intervals.Dominant7, Qualities.Major],
-        [Intervals.Diminished7, Qualities.Diminished],
-        [Intervals.Major9, Qualities.Major],
-        [Intervals.Major11, Qualities.Major],
-        [Intervals.Major13, Qualities.Major],
-    ] as [Intervals, Qualities][]);
-
     function mapToLookup<T>(map: Map<T, string[]>) {
         const lookup: Map<string, T> = new Map();
         map.forEach((values, key) => {

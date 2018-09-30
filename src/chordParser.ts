@@ -46,8 +46,11 @@ export namespace ChordParser {
         if (rootNote === undefined) {
             throw new Error(`[chords] Error when parsing chord: couldn't find root note ${rootNoteString}`);
         }
-        const qualityMaybe: Qualities | undefined =
+        const quality: Qualities | undefined =
             qualityString === undefined ? undefined : Naming.qualitiesLookup.get(qualityString);
+        if (quality === undefined) {
+            throw new Error(`[chords] Error when parsing chord: couldn't find quality ${qualityString}`);
+        }
         const interval: Intervals | undefined =
             intervalString === undefined ? undefined : Naming.intervalsLookup.get(intervalString);
         const added: Addeds | undefined = addedString === undefined ? undefined : Naming.addedsLookup.get(addedString);
@@ -55,13 +58,6 @@ export namespace ChordParser {
             suspendedString === undefined ? undefined : Naming.suspendedsLookup.get(suspendedString);
         const bassNote: Notes | undefined =
             bassNoteString === undefined ? undefined : Naming.notesLookup.get(bassNoteString);
-
-        const inferredQuality = interval === undefined ? undefined : Naming.intervalToQuality.get(interval);
-        if (qualityMaybe === undefined && inferredQuality === undefined) {
-            throw new Error(`[chords] Error when parsing chord: quality and interval cannot both be empty`);
-        }
-        // The ! is legitimate because of the check above: if qualityMaybe is undefined then inferredQuality cannot be undefined
-        const quality: Qualities = qualityMaybe === undefined ? inferredQuality! : qualityMaybe;
 
         return {
             rootNote,
@@ -79,7 +75,7 @@ export namespace ChordParser {
             ? undefined
             : {
                   rootNoteString: result[1] as Note,
-                  qualityString: result[2] as Quality | undefined,
+                  qualityString: result[2] as Quality,
                   intervalString: result[3] as Interval | undefined,
                   addedString: result[4] as Added | undefined,
                   suspendedString: result[5] as Suspended | undefined,
