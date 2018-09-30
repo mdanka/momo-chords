@@ -1,9 +1,9 @@
 {
-    "name": "guitar",
+    "name": "chord-ts",
     "version": "0.1.0",
+    "description": "Chord parser and printer",
     "main": "./lib/index.js",
     "typings": "./lib/index.d.ts",
-    "author": "Miklos Danka",
     "scripts": {
         "bundle": "webpack",
         "clean": "rimraf dist lib",
@@ -13,6 +13,22 @@
         "test": "mocha test/**.ts --require ts-node/register",
         "test-start": "karma start",
         "watch": "webpack -w"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/mdanka/chord-ts"
+    },
+    "keywords": [
+        "chord",
+        "chords",
+        "parse",
+        "parser",
+        "guitar",
+        "music"
+    ],
+    "author": "Miklos Danka",
+    "bugs": {
+        "url": "https://github.com/mdanka/chord-ts/issues"
     },
     "dependencies": {
         "classnames": "^2.2.5",
