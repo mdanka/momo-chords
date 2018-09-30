@@ -23,19 +23,19 @@ Currently it supports:
 
 ## Installation
 
-```
+```Shell
 npm install --save momo-chords
 ```
 
 or
 
-```
+```Shell
 yarn add momo-chords
 ```
 
 ## Usage
 
-```
+```TypeScript
 import { Chords } from "momo-chords";
 
 const chords = new Chords();
