@@ -1,5 +1,5 @@
 {
-    "name": "chord-ts",
+    "name": "momo-chords",
     "version": "0.1.1",
     "description": "Chord parser and printer",
     "main": "./lib/index.js",
@@ -16,7 +16,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/mdanka/chord-ts"
+        "url": "https://github.com/mdanka/momo-chords"
     },
     "keywords": [
         "chord",
@@ -28,7 +28,7 @@
     ],
     "author": "Miklos Danka",
     "bugs": {
-        "url": "https://github.com/mdanka/chord-ts/issues"
+        "url": "https://github.com/mdanka/momo-chords/issues"
     },
     "dependencies": {
         "commonjs": "^0.0.1",
