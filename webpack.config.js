@@ -15,25 +15,20 @@ module.exports = (function(options) {
 
     devtool: 'source-map',
 
-    mode: 'production',
-
     module: {
-      rules: [
+      loaders: [
         { test: /\.ts$/, loader: "awesome-typescript-loader" }
       ]
     },
 
     plugins: [
+      new webpack.optimize.UglifyJsPlugin()
     ],
 
     resolve: {
       extensions: ['.ts', '.js', '.json']
-    },
-
-    optimization: {
-        splitChunks: {
-            chunks: 'all'
-        }
     }
+
+
   }
 })()
