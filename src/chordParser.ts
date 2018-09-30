@@ -116,7 +116,7 @@ export namespace ChordParser {
     }
 
     function getBassNotesRegex() {
-        return getRegexGroup(getRegexFromArrayMap(Naming.notes, true, false), false, true);
+        return getRegexGroup("/" + getRegexFromArrayMap(Naming.notes, true, false), false, true);
     }
 
     function getRegexFromArrayMap<T>(map: Map<T, string[]>, isMatching: boolean, isOptional: boolean) {

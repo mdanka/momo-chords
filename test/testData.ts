@@ -1,4 +1,4 @@
-import { IChord, Notes, Qualities } from "../src";
+import { IChord, Notes, Qualities, Intervals } from "../src";
 
 export interface IChordPair {
     name: string;
@@ -68,6 +68,28 @@ export namespace TestData {
                 rootNote: Notes.CSharp,
                 quality: Qualities.Minor,
                 interval: undefined,
+                added: undefined,
+                suspended: undefined,
+                bassNote: undefined,
+            },
+        },
+        {
+            name: "Dbm/G#",
+            chord: {
+                rootNote: Notes.DFlat,
+                quality: Qualities.Minor,
+                interval: undefined,
+                added: undefined,
+                suspended: undefined,
+                bassNote: Notes.GSharp,
+            },
+        },
+        {
+            name: "G#maj7",
+            chord: {
+                rootNote: Notes.GSharp,
+                quality: Qualities.Major,
+                interval: Intervals.Major7,
                 added: undefined,
                 suspended: undefined,
                 bassNote: undefined,

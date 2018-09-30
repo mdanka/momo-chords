@@ -42,7 +42,8 @@ describe("Chords", () => {
     TestData.correctPairsWithCanonicalNames.forEach(testPair => {
         const { name, chord } = testPair;
         it(`should print chord correctly as ${name}`, () => {
-            assert.deepEqual(name, chords.print(chord));
+            const printedChord = chords.print(chord);
+            assert.strictEqual(name, printedChord, `Expected ${name} but received ${printedChord}`);
         });
     });
 });
