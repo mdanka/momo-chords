@@ -12,7 +12,7 @@
         "clean": "rimraf dist lib",
         "lint": "tslint -c tslint.json `find src -name '*.ts'`",
         "lint-fix": "tslint --fix -c tslint.json `find src -name '*.ts'`",
-        "prepublish": "rimraf ./lib && tsc -d",
+        "prepare": "rimraf ./lib && tsc -d",
         "test": "mocha test/**.ts --require ts-node/register",
         "test-start": "karma start",
         "watch": "webpack -w"
