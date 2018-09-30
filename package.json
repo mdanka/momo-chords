@@ -4,6 +4,7 @@
     "description": "Chord parser and printer",
     "main": "./lib/index.js",
     "typings": "./lib/index.d.ts",
+    "files": ["./lib"],
     "scripts": {
         "bundle": "webpack",
         "clean": "rimraf dist lib",
