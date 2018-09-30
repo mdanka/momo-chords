@@ -1,6 +1,6 @@
 {
     "name": "momo-chords",
-    "version": "0.1.5",
+    "version": "0.2.0",
     "description": "Chord parser and printer",
     "main": "./lib/index.js",
     "typings": "./lib/index.d.ts",
