@@ -1,4 +1,4 @@
-import { IChord, Notes, Qualities, Intervals, Addeds, Suspendeds } from "../src";
+import { IChord, Notes, Qualities } from "../src";
 
 export interface IChordPair {
     name: string;

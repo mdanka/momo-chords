@@ -13,6 +13,7 @@ import {
 } from "./types";
 import { Naming } from "./naming";
 
+// TODO(mdanka): remove test helper
 // tslint:disable
 
 interface IChordsRegexMatch {
@@ -39,13 +40,10 @@ export namespace ChordParser {
             return undefined;
         }
         const { rootNoteString, qualityString, intervalString, addedString, suspendedString, bassNoteString } = result;
-        console.log(rootNoteString);
-        console.log(Notes);
         const rootNote: Notes | undefined = rootNoteString === undefined ? undefined : Naming.notesLookup.get(rootNoteString);
         if (rootNote === undefined) {
             throw new Error(`[chords] Error when parsing chord: couldn't find root note ${rootNoteString}`);
         }
-        console.log(rootNote);
         const qualityMaybe: Qualities | undefined = qualityString === undefined ? undefined : Naming.qualitiesLookup.get(qualityString);
         const interval: Intervals | undefined = intervalString === undefined ? undefined : Naming.intervalsLookup.get(intervalString);
         const added: Addeds | undefined = addedString === undefined ? undefined : Naming.addedsLookup.get(addedString);
@@ -94,7 +92,7 @@ export namespace ChordParser {
     }
 
     function getRootNotesRegex() {
-        return getRegexFromStringList(getNotes(), true, false);
+        return getRegexFromArrayMap(Naming.notes, true, false);
     }
 
     function getQualitiesOrIntervalsRegex() {
@@ -118,7 +116,7 @@ export namespace ChordParser {
     }
 
     function getBassNotesRegex() {
-        return getRegexGroup(getRegexFromStringList(getNotes(), true, false), false, true);
+        return getRegexGroup(getRegexFromArrayMap(Naming.notes, true, false), false, true);
     }
 
     function getRegexFromArrayMap<T>(map: Map<T, string[]>, isMatching: boolean, isOptional: boolean) {
@@ -153,15 +151,6 @@ export namespace ChordParser {
             }
             return a < b ? -1 : 1;
         });
-    }
-
-    function getNotes() {
-        const values: string[] = [];
-        for (const key in Notes) {
-            const value: string = Notes[key];
-            values.push(value);
-        }
-        return values;
     }
 
     function getValuesFromArrayMap<T>(map: Map<T, string[]>) {
