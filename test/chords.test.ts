@@ -27,7 +27,7 @@ describe("Chords", () => {
         });
     });
 
-    TestDataChordList.allChords.forEach(name => {
+    TestDataChordList.chords.forEach(name => {
         it(`should say that '${name}' is a chord`, () => {
             assert.isTrue(chords.isChord(name), `Expected '${name}' to be identified as a chord`);
         });

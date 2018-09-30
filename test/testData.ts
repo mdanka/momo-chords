@@ -95,6 +95,17 @@ export namespace TestData {
                 bassNote: undefined,
             },
         },
+        {
+            name: "Bmmaj13/F#",
+            chord: {
+                rootNote: Notes.B,
+                quality: Qualities.Minor,
+                interval: Intervals.Major13,
+                added: undefined,
+                suspended: undefined,
+                bassNote: Notes.FSharp,
+            },
+        },
     ];
 
     export const correctPairsWithNonCanonicalNames: IChordPair[] = [
@@ -107,6 +118,17 @@ export namespace TestData {
                 added: undefined,
                 suspended: undefined,
                 bassNote: undefined,
+            },
+        },
+        {
+            name: "BmM13/F#",
+            chord: {
+                rootNote: Notes.B,
+                quality: Qualities.Minor,
+                interval: Intervals.Major13,
+                added: undefined,
+                suspended: undefined,
+                bassNote: Notes.FSharp,
             },
         },
     ];

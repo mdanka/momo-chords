@@ -1,7 +1,7 @@
 // Chords based on https://jguitar.com
 
 export namespace TestDataChordList {
-    export const allChords = [
+    const allChords = [
         "C",
         "C/E",
         "C/G",
@@ -4563,4 +4563,6 @@ export namespace TestDataChordList {
         "Badd9/F#",
         "Badd9/Gb",
     ];
+
+    export const chords = allChords.filter(chord => !chord.includes("#5") && !chord.includes("b5"));
 }
