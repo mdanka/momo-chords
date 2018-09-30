@@ -7,28 +7,33 @@ module.exports = (function(options) {
     entry: __dirname + "/src/index.ts",
 
     output: {
-      path: __dirname + "/dist",
+        path: __dirname + "/dist",
 
-      filename: "MomoChords.js",
-      library: "MomoChords"
+        filename: "MomoChords.js",
+        library: "MomoChords"
     },
 
     devtool: 'source-map',
 
     module: {
-      loaders: [
+        preLoaders: [
+            {
+                test: /\.js$/,
+                loader: "source-map-loader",
+                exclude: /node_modules/,
+            },
+        ],
+        loaders: [
         { test: /\.ts$/, loader: "awesome-typescript-loader" }
-      ]
+        ]
     },
 
     plugins: [
-      new webpack.optimize.UglifyJsPlugin()
+        new webpack.optimize.UglifyJsPlugin()
     ],
 
     resolve: {
-      extensions: ['.ts', '.js', '.json']
+        extensions: ['.ts', '.js', '.json']
     }
-
-
   }
 })()
