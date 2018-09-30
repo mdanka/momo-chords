@@ -1,5 +1,6 @@
 .vscode/
 dist/
+.travis.yml
 karma.conf.js
 test/
 tsconfig.json
