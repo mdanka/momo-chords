@@ -5,7 +5,7 @@
     "main": "./lib/index.js",
     "typings": "./lib/index.d.ts",
     "scripts": {
-        "bundle": "webpack",
+        "bundle": "rimraf ./dist && webpack",
         "clean": "rimraf dist lib",
         "lint": "tslint -c tslint.json `find src -name '*.ts'`",
         "lint-fix": "tslint --fix -c tslint.json `find src -name '*.ts'`",

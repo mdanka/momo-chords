@@ -9,12 +9,8 @@ module.exports = (function(options) {
     output: {
       path: __dirname + "/dist",
 
-      //
-      // TODO:
-      // Enter your library name here!
-      //
-      filename: "LibraryTemplate.js",
-      library: "LibraryTemplate"
+      filename: "MomoChords.js",
+      library: "MomoChords"
     },
 
     devtool: 'source-map',
