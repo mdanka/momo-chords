@@ -3,6 +3,7 @@ import { assert } from "chai";
 
 import { Chords } from "../src";
 import { TestData } from "./testData";
+import { TestDataChordList } from "./testDataChordList";
 
 const chords = new Chords();
 
@@ -16,13 +17,19 @@ describe("Chords", () => {
     allCorrectTestPairs.forEach(testPair => {
         const { name } = testPair;
         it(`should say that '${name}' is a chord`, () => {
-            assert.isTrue(chords.isChord(name));
+            assert.isTrue(chords.isChord(name), `Expected '${name}' to be identified as a chord`);
         });
     });
 
     TestData.incorrectNames.forEach(name => {
         it(`should say that '${name}' is not a chord`, () => {
-            assert.isFalse(chords.isChord(name));
+            assert.isFalse(chords.isChord(name), `Expected '${name}' NOT to be identified as a chord`);
+        });
+    });
+
+    TestDataChordList.allChords.forEach(name => {
+        it(`should say that '${name}' is a chord`, () => {
+            assert.isTrue(chords.isChord(name), `Expected '${name}' to be identified as a chord`);
         });
     });
 
@@ -33,7 +40,7 @@ describe("Chords", () => {
     allCorrectTestPairs.forEach(testPair => {
         const { name, chord } = testPair;
         it(`should parse '${name}' correctly as a chord`, () => {
-            assert.deepEqual(chord, chords.parse(name));
+            assert.deepEqual(chord, chords.parse(name), `Expected '${name}' to parse correctly as a chord`);
         });
     });
 
@@ -45,7 +52,7 @@ describe("Chords", () => {
         const { name, chord } = testPair;
         it(`should print chord correctly as '${name}'`, () => {
             const printedChord = chords.print(chord);
-            assert.strictEqual(name, printedChord, `Expected ${name} but received ${printedChord}`);
+            assert.strictEqual(name, printedChord, `Expected '${name}' but received '${printedChord}'`);
         });
     });
 });
