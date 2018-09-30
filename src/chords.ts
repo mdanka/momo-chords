@@ -16,18 +16,21 @@ export class Chords {
 
         let name: string = "";
         name += rootNote;
+
+        if (quality !== undefined) {
+            const qualityNames = Naming.qualities.get(quality);
+            if (qualityNames === undefined) {
+                throw new Error(`[Chords] No name found for quality ${quality}`);
+            }
+            name += qualityNames[0];
+        }
+
         if (interval !== undefined) {
             const intervalNames = Naming.intervals.get(interval);
             if (intervalNames === undefined) {
                 throw new Error(`[Chords] No name found for interval ${interval}`);
             }
             name += intervalNames[0];
-        } else {
-            const qualityNames = Naming.qualities.get(quality);
-            if (qualityNames === undefined) {
-                throw new Error(`[Chords] No name found for quality ${quality}`);
-            }
-            name += qualityNames[0];
         }
 
         if (added !== undefined) {

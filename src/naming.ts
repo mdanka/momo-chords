@@ -37,8 +37,6 @@ export namespace Naming {
         [Intervals.Major9, ["maj9", "M9", "9"]],
         [Intervals.Major11, ["maj11", "M11", "11"]],
         [Intervals.Major13, ["maj13", "M13", "13"]],
-        [Intervals.AugmentedDominant7, ["7#5", "7(#5]"]],
-        [Intervals.AugmentedMajor7, ["maj7#5", "maj7(#5]"]],
     ] as [Intervals, string[]][]);
 
     export const addeds: Map<Addeds, string[]> = new Map([
@@ -69,8 +67,6 @@ export namespace Naming {
         [Intervals.Major9, Qualities.Major],
         [Intervals.Major11, Qualities.Major],
         [Intervals.Major13, Qualities.Major],
-        [Intervals.AugmentedDominant7, Qualities.Major],
-        [Intervals.AugmentedMajor7, Qualities.Major],
     ] as [Intervals, Qualities][]);
 
     function mapToLookup<T>(map: Map<T, string[]>) {

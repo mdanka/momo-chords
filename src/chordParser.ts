@@ -22,6 +22,12 @@ interface IChordsRegexMatch {
     bassNoteString: Note | undefined;
 }
 
+interface IMatchingOptions {
+    isMatching: boolean;
+    isOptional: boolean;
+    isShortestFirst: boolean;
+}
+
 export namespace ChordParser {
     const chordsRegex = getChordsRegex();
 
@@ -86,45 +92,47 @@ export namespace ChordParser {
     }
 
     function getChordsContentRegex() {
-        // This will create a regex matching (rootNote)(?:(quality)|(interval))(added)?(suspended)?(?:/(bassNote))?
-        return `${getRootNotesRegex()}${getQualitiesOrIntervalsRegex()}${getAddedsRegex()}${getSuspendedsRegex()}${getBassNotesRegex()}`;
+        // This will create a regex matching (rootNote)(quality)(interval)?(added)?(suspended)?(?:/(bassNote))?
+        return `${getRootNotesRegex()}${getQualitiesRegex()}${getIntervalsRegex()}${getAddedsRegex()}${getSuspendedsRegex()}${getBassNotesRegex()}`;
     }
 
     function getRootNotesRegex() {
-        return getRegexFromArrayMap(Naming.notes, true, false);
-    }
-
-    function getQualitiesOrIntervalsRegex() {
-        return getRegexDisjunction([getQualitiesRegex(), getIntervalsRegex()], false, false);
+        return getRegexFromArrayMap(Naming.notes, { isMatching: true, isOptional: false, isShortestFirst: false });
     }
 
     function getQualitiesRegex() {
-        return getRegexFromArrayMap(Naming.qualities, true, false);
+        // Note that with qualities we take the shortest first, because we'd like the interval to consume characters when posible
+        return getRegexFromArrayMap(Naming.qualities, { isMatching: true, isOptional: false, isShortestFirst: true });
     }
 
     function getIntervalsRegex() {
-        return getRegexFromArrayMap(Naming.intervals, true, false);
+        return getRegexFromArrayMap(Naming.intervals, { isMatching: true, isOptional: true, isShortestFirst: false });
     }
 
     function getAddedsRegex() {
-        return getRegexFromArrayMap(Naming.addeds, true, true);
+        return getRegexFromArrayMap(Naming.addeds, { isMatching: true, isOptional: true, isShortestFirst: false });
     }
 
     function getSuspendedsRegex() {
-        return getRegexFromArrayMap(Naming.suspendeds, true, true);
+        return getRegexFromArrayMap(Naming.suspendeds, { isMatching: true, isOptional: true, isShortestFirst: false });
     }
 
     function getBassNotesRegex() {
-        return getRegexGroup("/" + getRegexFromArrayMap(Naming.notes, true, false), false, true);
+        return getRegexGroup(
+            "/" + getRegexFromArrayMap(Naming.notes, { isMatching: true, isOptional: false, isShortestFirst: false }),
+            false,
+            true,
+        );
     }
 
-    function getRegexFromArrayMap<T>(map: Map<T, string[]>, isMatching: boolean, isOptional: boolean) {
+    function getRegexFromArrayMap<T>(map: Map<T, string[]>, matchingOptions: IMatchingOptions) {
         const values = getValuesFromArrayMap(map);
-        return getRegexFromStringList(values, isMatching, isOptional);
+        return getRegexFromStringList(values, matchingOptions);
     }
 
-    function getRegexFromStringList(values: string[], isMatching: boolean, isOptional: boolean) {
-        const sortedValues = sortValuesByLength(values);
+    function getRegexFromStringList(values: string[], matchingOptions: IMatchingOptions) {
+        const { isShortestFirst, isMatching, isOptional } = matchingOptions;
+        const sortedValues = sortValuesByLength(values, isShortestFirst);
         const escapedValues = sortedValues.map(escapeRegex);
         const disjunction = getRegexDisjunction(escapedValues, isMatching, isOptional);
         return disjunction;
@@ -142,13 +150,14 @@ export namespace ChordParser {
         return `^${regex}$`;
     }
 
-    function sortValuesByLength(values: string[]) {
+    function sortValuesByLength(values: string[], isShortestFirst: boolean) {
+        const resultMultiplier = isShortestFirst ? 1 : -1;
         return values.sort(function(a, b) {
-            const lengthDifference = b.length - a.length;
+            const lengthDifference = a.length - b.length;
             if (lengthDifference !== 0) {
-                return lengthDifference < 0 ? -1 : 1;
+                return (lengthDifference < 0 ? -1 : 1) * resultMultiplier;
             }
-            return a < b ? -1 : 1;
+            return (a > b ? -1 : 1) * resultMultiplier;
         });
     }
 

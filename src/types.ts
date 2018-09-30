@@ -36,8 +36,6 @@ export enum Intervals {
     Major9 = "Major9",
     Major11 = "Major11",
     Major13 = "Major13",
-    AugmentedDominant7 = "AugmentedDominant7",
-    AugmentedMajor7 = "AugmentedMajor7",
 }
 export type Interval = keyof typeof Intervals;
 
