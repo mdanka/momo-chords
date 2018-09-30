@@ -5,14 +5,15 @@
     "main": "./lib/index.js",
     "typings": "./lib/index.d.ts",
     "scripts": {
+        "build": "yarn run clean && tsc -d",
         "bundle": "rimraf ./dist && webpack",
+        "bundle-watch": "webpack -w",
         "clean": "rimraf dist lib",
         "lint": "tslint -c tslint.json `find src -name '*.ts'`",
         "lint-fix": "tslint --fix -c tslint.json `find src -name '*.ts'`",
-        "prepare": "rimraf ./lib && tsc -d",
+        "prepare": "yarn run build",
         "test": "mocha test/**.ts --require ts-node/register",
-        "test-start": "karma start",
-        "watch": "webpack -w"
+        "test-start": "karma start"
     },
     "repository": {
         "type": "git",
