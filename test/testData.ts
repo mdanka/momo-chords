@@ -97,5 +97,19 @@ export namespace TestData {
         },
     ];
 
+    export const correctPairsWithNonCanonicalNames: IChordPair[] = [
+        {
+            name: "G#M7",
+            chord: {
+                rootNote: Notes.GSharp,
+                quality: Qualities.Major,
+                interval: Intervals.Major7,
+                added: undefined,
+                suspended: undefined,
+                bassNote: undefined,
+            },
+        },
+    ];
+
     export const incorrectNames: string[] = ["", "T", "Ah", "Cb", "E#"];
 }

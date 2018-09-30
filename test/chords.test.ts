@@ -6,12 +6,14 @@ import { TestData } from "./testData";
 
 const chords = new Chords();
 
+const allCorrectTestPairs = [...TestData.correctPairsWithCanonicalNames, ...TestData.correctPairsWithNonCanonicalNames];
+
 describe("Chords", () => {
     /**
      * isChord
      */
 
-    TestData.correctPairsWithCanonicalNames.forEach(testPair => {
+    allCorrectTestPairs.forEach(testPair => {
         const { name } = testPair;
         it(`should say that ${name} is a chord`, () => {
             assert.isTrue(chords.isChord(name));
@@ -28,7 +30,7 @@ describe("Chords", () => {
      * parse
      */
 
-    TestData.correctPairsWithCanonicalNames.forEach(testPair => {
+    allCorrectTestPairs.forEach(testPair => {
         const { name, chord } = testPair;
         it(`should parse ${name} correctly as a chord`, () => {
             assert.deepEqual(chord, chords.parse(name));

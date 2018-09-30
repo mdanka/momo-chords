@@ -13,9 +13,6 @@ import {
 } from "./types";
 import { Naming } from "./naming";
 
-// TODO(mdanka): remove test helper
-// tslint:disable
-
 interface IChordsRegexMatch {
     rootNoteString: Note;
     qualityString: Quality | undefined;
@@ -27,11 +24,9 @@ interface IChordsRegexMatch {
 
 export namespace ChordParser {
     const chordsRegex = getChordsRegex();
-    console.log(chordsRegex);
 
     export function parse(value: string): IChord | undefined {
         const regexResult = matchChordsRegex(value);
-        console.log(regexResult);
         return chordsRegexMatchToChord(regexResult);
     }
 
@@ -40,16 +35,20 @@ export namespace ChordParser {
             return undefined;
         }
         const { rootNoteString, qualityString, intervalString, addedString, suspendedString, bassNoteString } = result;
-        const rootNote: Notes | undefined = rootNoteString === undefined ? undefined : Naming.notesLookup.get(rootNoteString);
+        const rootNote: Notes | undefined =
+            rootNoteString === undefined ? undefined : Naming.notesLookup.get(rootNoteString);
         if (rootNote === undefined) {
             throw new Error(`[chords] Error when parsing chord: couldn't find root note ${rootNoteString}`);
         }
-        const qualityMaybe: Qualities | undefined = qualityString === undefined ? undefined : Naming.qualitiesLookup.get(qualityString);
-        const interval: Intervals | undefined = intervalString === undefined ? undefined : Naming.intervalsLookup.get(intervalString);
+        const qualityMaybe: Qualities | undefined =
+            qualityString === undefined ? undefined : Naming.qualitiesLookup.get(qualityString);
+        const interval: Intervals | undefined =
+            intervalString === undefined ? undefined : Naming.intervalsLookup.get(intervalString);
         const added: Addeds | undefined = addedString === undefined ? undefined : Naming.addedsLookup.get(addedString);
         const suspended: Suspendeds | undefined =
             suspendedString === undefined ? undefined : Naming.suspendedsLookup.get(suspendedString);
-        const bassNote: Notes | undefined = bassNoteString === undefined ? undefined : Naming.notesLookup.get(bassNoteString);
+        const bassNote: Notes | undefined =
+            bassNoteString === undefined ? undefined : Naming.notesLookup.get(bassNoteString);
 
         const inferredQuality = interval === undefined ? undefined : Naming.intervalToQuality.get(interval);
         if (qualityMaybe === undefined && inferredQuality === undefined) {
