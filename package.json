@@ -1,6 +1,6 @@
 {
     "name": "chord-ts",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Chord parser and printer",
     "main": "./lib/index.js",
     "typings": "./lib/index.d.ts",
@@ -31,14 +31,11 @@
         "url": "https://github.com/mdanka/chord-ts/issues"
     },
     "dependencies": {
-        "classnames": "^2.2.5",
         "commonjs": "^0.0.1",
-        "es6-shim": "^0.35.3",
-        "immutable": "^3.8.2"
+        "es6-shim": "^0.35.3"
     },
     "devDependencies": {
         "@types/chai": "^3.4.35",
-        "@types/classnames": "^0.0.32",
         "@types/es6-shim": "^0.31.33",
         "@types/mocha": "^2.2.40",
         "awesome-typescript-loader": "^3.1.2",
