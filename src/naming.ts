@@ -34,8 +34,14 @@ export namespace Naming {
         [Intervals.Minor7, ["m7", "Min7", "min7", "minor7", "-7"]],
         [Intervals.Dominant7, ["7", "dom7", "dominant7"]],
         [Intervals.Diminished7, ["dim7", "diminished7"]],
-        [Intervals.Major9, ["maj9", "M9", "9"]],
-        [Intervals.Major11, ["maj11", "M11", "11"]],
+        [Intervals.Major9, ["maj9", "M9"]],
+        [Intervals.Dominant9, ["9"]],
+        [Intervals.Sharpened9, ["#9", "7#9"]],
+        [Intervals.Flattened9, ["b9", "7b9"]],
+        [Intervals.Major11, ["maj11", "M11"]],
+        [Intervals.Dominant11, ["11"]],
+        [Intervals.Sharpened11, ["#11"]],
+        [Intervals.Flattened11, ["b11"]],
         [Intervals.Major13, ["maj13", "M13", "13"]],
     ] as [Intervals, string[]][]);
 

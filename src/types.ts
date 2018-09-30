@@ -34,7 +34,13 @@ export enum Intervals {
     Dominant7 = "Dominant7",
     Diminished7 = "Diminished7",
     Major9 = "Major9",
+    Dominant9 = "Dominant9",
+    Sharpened9 = "Sharpened9",
+    Flattened9 = "Flattened9",
     Major11 = "Major11",
+    Dominant11 = "Dominant11",
+    Sharpened11 = "Sharpened11",
+    Flattened11 = "Flattened11",
     Major13 = "Major13",
 }
 export type Interval = keyof typeof Intervals;
