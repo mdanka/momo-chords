@@ -52,9 +52,4 @@ export class Chords {
 
         return name;
     }
-
-    public search(_query: string): IChord[] {
-        // TODO(mdanka): implement lookup
-        return [];
-    }
 }

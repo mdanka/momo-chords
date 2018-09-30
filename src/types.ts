@@ -44,6 +44,7 @@ export type Interval = keyof typeof Intervals;
 export enum Addeds {
     Add9 = "Add9",
     Add11 = "Add11",
+    Add13 = "Add13",
     Major6 = "Major6",
     SixNine = "SixNine",
 }
