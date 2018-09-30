@@ -52,6 +52,7 @@ export namespace Naming {
     export const suspendeds: Map<Suspendeds, string[]> = new Map([
         [Suspendeds.Sus4, ["sus4", "suspended", "sus"]],
         [Suspendeds.Sus2, ["sus2", "suspended2"]],
+        [Suspendeds.Sus2Sus4, ["sus2sus4"]],
     ] as [Suspendeds, string[]][]);
 
     export const notesLookup = mapToLookup(notes);

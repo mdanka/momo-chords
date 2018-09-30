@@ -53,6 +53,7 @@ export type Added = keyof typeof Addeds;
 export enum Suspendeds {
     Sus4 = "Sus4",
     Sus2 = "Sus2",
+    Sus2Sus4 = "Sus2Sus4",
 }
 export type Suspended = keyof typeof Suspendeds;
 
