@@ -6,7 +6,7 @@ export interface IChordPair {
 }
 
 export namespace TestData {
-    export const correct: IChordPair[] = [
+    export const correctPairsWithCanonicalNames: IChordPair[] = [
         {
             name: "A",
             chord: {
@@ -40,7 +40,40 @@ export namespace TestData {
                 bassNote: undefined,
             },
         },
+        {
+            name: "Am",
+            chord: {
+                rootNote: Notes.A,
+                quality: Qualities.Minor,
+                interval: undefined,
+                added: undefined,
+                suspended: undefined,
+                bassNote: undefined,
+            },
+        },
+        {
+            name: "Bbm",
+            chord: {
+                rootNote: Notes.BFlat,
+                quality: Qualities.Minor,
+                interval: undefined,
+                added: undefined,
+                suspended: undefined,
+                bassNote: undefined,
+            },
+        },
+        {
+            name: "C#m",
+            chord: {
+                rootNote: Notes.CSharp,
+                quality: Qualities.Minor,
+                interval: undefined,
+                added: undefined,
+                suspended: undefined,
+                bassNote: undefined,
+            },
+        },
     ];
 
-    export const incorrectNames: string[] = ["T", "Cb"];
+    export const incorrectNames: string[] = ["", "T", "Ah", "Cb", "E#"];
 }

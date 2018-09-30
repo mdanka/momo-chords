@@ -11,7 +11,7 @@ describe("Chords", () => {
      * isChord
      */
 
-    TestData.correct.forEach(testPair => {
+    TestData.correctPairsWithCanonicalNames.forEach(testPair => {
         const { name } = testPair;
         it(`should say that ${name} is a chord`, () => {
             assert.isTrue(chords.isChord(name));
@@ -28,7 +28,7 @@ describe("Chords", () => {
      * parse
      */
 
-    TestData.correct.forEach(testPair => {
+    TestData.correctPairsWithCanonicalNames.forEach(testPair => {
         const { name, chord } = testPair;
         it(`should parse ${name} correctly as a chord`, () => {
             assert.deepEqual(chord, chords.parse(name));
@@ -38,4 +38,11 @@ describe("Chords", () => {
     /**
      * print
      */
+
+    TestData.correctPairsWithCanonicalNames.forEach(testPair => {
+        const { name, chord } = testPair;
+        it(`should print chord correctly as ${name}`, () => {
+            assert.deepEqual(name, chords.print(chord));
+        });
+    });
 });
