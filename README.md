@@ -6,6 +6,8 @@ Chord parser and printer.
 [![Build Status](https://travis-ci.org/mdanka/momo-chords.svg)](https://travis-ci.org/mdanka/momo-chords) 
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-typescript-blue.svg)](http://www.typescriptlang.org/)
 
+Try it on the [demo page](https://momo-chords.miklosdanka.com/)!
+
 ## Overview
 
 There are many existing libraries that tackle handling chords. However, they either don't support a large enough set of chords, or they lack functionality, or they are not properly configurable, or they do't come with types.
