@@ -28,6 +28,11 @@ export class AppContainer extends React.PureComponent<{}, IAppState> {
         return (
             <div className="app">
                 <h1>momo-chords</h1>
+                <p className="md-running-text">
+                    <a href="https://github.com/mdanka/momo-chords" target="_blank">
+                        Github
+                    </a>
+                </p>
                 <p className="md-running-text">Enter a chord to see its analysis.</p>
                 <p className="md-running-text">
                     <input className="chord-input" value={chordText} onChange={this.handleInputChange} />
