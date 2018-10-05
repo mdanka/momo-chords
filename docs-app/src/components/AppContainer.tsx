@@ -35,10 +35,57 @@ export class AppContainer extends React.PureComponent<{}, IAppState> {
 
                 <h3>Is it a chord?</h3>
                 <p className="md-running-text">{isChord ? "Yes" : "No"}</p>
+                {this.renderReportIsChord()}
                 {this.renderChord()}
             </div>
         );
     }
+
+    private renderReportIsChord = () => {
+        const { chordText, isChord } = this.state;
+        const question = isChord ? "Should this not be a chord?" : "Should this be a chord?";
+        const callToAction = isChord ? "Click here to report wrong chord." : "Click here to report missing chord.";
+        const issueTitle = isChord ? `Wrong chord: ${chordText}` : `Missing chord: ${chordText}`;
+        const issueBody = isChord
+            ? `I think \`${chordText}\` should not be recognised as a chord because... <fill in why>`
+            : `I think \`${chordText}\` should be recognised as a chord because... <fill in why>`;
+        return this.renderReport(question, callToAction, issueTitle, issueBody);
+    };
+
+    private renderReportChordObject = () => {
+        const { chordText, chord } = this.state;
+        const chordJson = JSON.stringify(chord);
+        const question = "Is this chord incorrectly classified?";
+        const callToAction = "Click here to report incorrect classification.";
+        const issueTitle = `Wrong chord properties: ${chordText}`;
+        const issueBody = `\`${chordText}\` is parsed as \`${chordJson}\`, but I think it is incorrect because... <fill in why>`;
+        return this.renderReport(question, callToAction, issueTitle, issueBody);
+    };
+
+    private renderReportChordName = () => {
+        const { chordText, chord } = this.state;
+        if (chord === undefined) {
+            return null;
+        }
+        const chordName = this.chords.print(chord);
+        const question = "Is this chord incorrectly named?";
+        const callToAction = "Click here to report incorrect naming.";
+        const issueTitle = `Wrong chord naming: ${chordText} named as ${chordName}`;
+        const issueBody = `\`${chordText}\` is named as \`${chordName}\`, but I think it is incorrect because... <fill in why>`;
+        return this.renderReport(question, callToAction, issueTitle, issueBody);
+    };
+
+    private renderReport = (question: string, callToAction: string, issueTitle: string, issueBody: string) => {
+        const issueUrl = this.getCreateIssueUrl(issueTitle, issueBody);
+        return (
+            <p>
+                {question}{" "}
+                <a target="_blank" href={issueUrl}>
+                    {callToAction}
+                </a>
+            </p>
+        );
+    };
 
     private renderChord = () => {
         const { chord } = this.state;
@@ -75,10 +122,12 @@ export class AppContainer extends React.PureComponent<{}, IAppState> {
                         {bassNote === undefined ? "-" : bassNote}
                     </li>
                 </ul>
+                {this.renderReportChordObject()}
                 <h3>JSON</h3>
                 <p className="md-running-text md-code">{JSON.stringify(chord)}</p>
                 <h3>Name</h3>
                 <p className="md-running-text">{this.chords.print(chord)}</p>
+                {this.renderReportChordName()}
             </div>
         );
     };
@@ -96,5 +145,11 @@ export class AppContainer extends React.PureComponent<{}, IAppState> {
             isChord,
             chord,
         });
+    };
+
+    private getCreateIssueUrl = (issueTitle: string, issueBody: string) => {
+        const issueTitleEncoded = encodeURIComponent(issueTitle);
+        const issueBodyEncoded = encodeURIComponent(issueBody);
+        return `https://github.com/mdanka/momo-chords/issues/new?labels=bug&title=${issueTitleEncoded}&body=${issueBodyEncoded}`;
     };
 }
