@@ -1,0 +1,90 @@
+{
+    "defaultSeverity": "warning",
+    "rulesDirectory": [
+        "tslint",
+        "tslint-react",
+        "tslint-config-prettier",
+        "tslint-plugin-prettier"
+    ],
+    "rules": {
+        "linebreak-style": [
+            true,
+            "LF"
+        ],
+        "no-console": [
+            true,
+            "log",
+            "warn"
+        ],
+        "no-invalid-this": [
+            true,
+            "check-function-in-method"
+        ],
+        "ban": [
+            [
+                "_",
+                "extend",
+                "use object spread"
+            ],
+            [
+                "_",
+                "isNull",
+                "use plain JS"
+            ],
+            [
+                "_",
+                "isDefined",
+                "use plain JS"
+            ],
+            [
+                "assert",
+                "equal",
+                "use assert.strictEqual instead"
+            ],
+            [
+                "describe",
+                "only",
+                "should not be committed to repo"
+            ],
+            [
+                "it",
+                "only",
+                "should not be committed to repo"
+            ],
+            [
+                "Object",
+                "assign",
+                "use object spread"
+            ],
+            [
+                "Object",
+                "getOwnPropertyNames",
+                "use Object.keys()"
+            ],
+            [
+                "test",
+                "only",
+                "should not be committed to repo"
+            ]
+        ],
+        "no-default-export": true,
+        "no-unnecessary-callback-wrapper": true,
+        "no-unnecessary-initializer": true,
+        "prettier": {
+            "options": [{
+                "printWidth": 120,
+                "tabWidth": 4,
+                "trailingComma": "all"
+            }]
+        },
+        "variable-name": [
+            "allow-leading-underscore",
+            "allow-pascal-case",
+            "ban-keywords",
+            "check-format"
+        ],
+        "no-empty-interface": false,
+        "object-literal-sort-keys": false,
+        "no-implicit-dependencies": true
+    }
+}
