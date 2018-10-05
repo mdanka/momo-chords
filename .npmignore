@@ -1,4 +1,6 @@
 .vscode/
+docs/
+docs-app/
 dist/
 .travis.yml
 karma.conf.js
