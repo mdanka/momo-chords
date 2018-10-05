@@ -21,6 +21,8 @@
       "target": "es5"
     },
     "exclude": [
+      "docs",
+      "docs-app",
       "test",
       "node_modules",
       "lib"
