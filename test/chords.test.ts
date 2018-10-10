@@ -48,11 +48,11 @@ describe("Chords", () => {
      * print
      */
 
-    // TestData.correctPairsWithCanonicalNames.forEach(testPair => {
-    //     const { name, chord } = testPair;
-    //     it(`should print chord correctly as '${name}'`, () => {
-    //         const printedChord = chords.print(chord);
-    //         assert.strictEqual(name, printedChord, `Expected '${name}' but received '${printedChord}'`);
-    //     });
-    // });
+    TestData.correctPairsWithCanonicalNames.forEach(testPair => {
+        const { name, chordSymbol } = testPair;
+        it(`should print chord correctly as '${name}'`, () => {
+            const printedChord = chords.print(chordSymbol);
+            assert.strictEqual(printedChord, name, `Expected '${name}' but received '${printedChord}'`);
+        });
+    });
 });

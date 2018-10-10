@@ -22,7 +22,7 @@ export namespace Naming {
         [Notes.GSharp, ["G#", "G♯"]],
     ] as [Notes, string[]][]);
 
-    const majorSymbols = ["major", "maj", "Maj", "M", "Δ"];
+    const majorSymbols = ["maj", "major", "Maj", "M", "Δ"];
     const minorSymbols = ["m", "minor", "min", "−", "-"];
     const augmentedSymbols = ["aug", "augmented", "+"];
     export const qualities: Map<Qualities, string[]> = new Map([
@@ -31,7 +31,7 @@ export namespace Naming {
         [Qualities.MinorMajor, combineLists(minorSymbols, majorSymbols)],
         [Qualities.Augmented, augmentedSymbols],
         [Qualities.AugmentedMajor, combineLists(augmentedSymbols, majorSymbols)],
-        [Qualities.Diminished, ["dim", "diminished", "°", "o", "0"]],
+        [Qualities.Diminished, ["0", "dim", "diminished", "°", "o", "O"]],
         [Qualities.HalfDiminished, ["Ø", "ø"]],
         [Qualities.Power, ["5", "no3"]],
     ] as [Qualities, string[]][]);

@@ -62,12 +62,14 @@ export enum Addeds {
     Add13 = "Add13",
 }
 export type Added = keyof typeof Addeds;
+export const addedOrder = [Addeds.Add13, Addeds.Add11, Addeds.Add9];
 
 export enum Suspendeds {
     Sus4 = "Sus4",
     Sus2 = "Sus2",
 }
 export type Suspended = keyof typeof Suspendeds;
+export const suspendedOrder = [Suspendeds.Sus2, Suspendeds.Sus4];
 
 export enum AlteredFifths {
     Sharpened5 = "Sharpened5",

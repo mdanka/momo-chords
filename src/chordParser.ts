@@ -18,6 +18,8 @@ import {
     Elevenths,
     Thirteenths,
     AlteredFifths,
+    addedOrder,
+    suspendedOrder,
 } from "./types";
 import { Naming } from "./naming";
 
@@ -187,12 +189,10 @@ export namespace ChordParser {
     }
 
     function getAddedsRegex() {
-        const addedOrder = [Addeds.Add13, Addeds.Add11, Addeds.Add9];
         return getRegexFromOrderedEnumValues(addedOrder, Naming.addeds);
     }
 
     function getSuspendedsRegex() {
-        const suspendedOrder = [Suspendeds.Sus2, Suspendeds.Sus4];
         return getRegexFromOrderedEnumValues(suspendedOrder, Naming.suspendeds);
     }
 
