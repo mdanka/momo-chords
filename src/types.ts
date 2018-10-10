@@ -111,6 +111,21 @@ export interface INamedChordSymbol extends IChordSymbol {
     name: string;
 }
 
+/**
+ * The chord structure uses the integer notation.
+ *
+ * 1  C#  b9
+ * 2  D   2, 9
+ * 3  D#  minor 3, #9
+ * 4  E   major 3, b11
+ * 5  F   4, perfect 11
+ * 6  F#  b5, #11
+ * 7  G   perfect 5
+ * 8  G#  #5, minor 13
+ * 9  A   6, major 13
+ * 10 A#  minor 7
+ * 11 B   major 7
+ */
 export interface IChordStructure {
     1: boolean;
     2: boolean;
