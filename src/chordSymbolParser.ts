@@ -43,7 +43,7 @@ interface IMatchingOptions {
     isMultiple: boolean;
 }
 
-export namespace ChordParser {
+export namespace ChordSymbolParser {
     const chordsRegex = getChordsRegex();
 
     export function parse(value: string): IChordSymbol | undefined {
