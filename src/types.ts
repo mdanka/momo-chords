@@ -110,3 +110,33 @@ export interface IChordSymbol extends IChordSymbolStructure {
 export interface INamedChordSymbol extends IChordSymbol {
     name: string;
 }
+
+export interface IChordStructure {
+    1: boolean;
+    2: boolean;
+    3: boolean;
+    4: boolean;
+    5: boolean;
+    6: boolean;
+    7: boolean;
+    8: boolean;
+    9: boolean;
+    10: boolean;
+    11: boolean;
+}
+
+export interface IChord extends IChordStructure {
+    /**
+     * The main note
+     */
+    rootNote: Notes;
+
+    /**
+     * For example: C/G
+     */
+    bassNote: Notes | undefined;
+}
+
+export interface INamedChord extends IChord {
+    name: string;
+}

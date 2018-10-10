@@ -40,7 +40,7 @@ describe("Chords", () => {
     allCorrectTestPairs.forEach(testPair => {
         const { name, chordSymbol } = testPair;
         it(`should parse '${name}' correctly as a chord`, () => {
-            assert.deepEqual(chords.parse(name), chordSymbol, `Expected '${name}' to parse correctly as a chord`);
+            assert.deepEqual(chords.parseSymbol(name), chordSymbol, `Expected '${name}' to parse correctly as a chord`);
         });
     });
 
