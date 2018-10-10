@@ -22,58 +22,82 @@ export type Note = keyof typeof Notes;
 export enum Qualities {
     Major = "Major",
     Minor = "Minor",
+    MinorMajor = "MinorMajor",
     Augmented = "Augmented",
+    AugmentedMajor = "AugmentedMajor",
     Diminished = "Diminished",
+    HalfDiminished = "HalfDiminished",
     Power = "Power",
 }
 export type Quality = keyof typeof Qualities;
 
-export enum Intervals {
-    Major7 = "Major7",
-    Minor7 = "Minor7",
-    Dominant7 = "Dominant7",
-    Diminished7 = "Diminished7",
+export enum Sevenths {
+    Seventh = "Seventh",
+}
+export type Seventh = keyof typeof Sevenths;
+
+export enum Ninths {
     Major9 = "Major9",
-    Dominant9 = "Dominant9",
+    Minor9 = "Minor9",
     Sharpened9 = "Sharpened9",
-    Flattened9 = "Flattened9",
-    Major11 = "Major11",
-    Dominant11 = "Dominant11",
+}
+export type Ninth = keyof typeof Ninths;
+
+export enum Elevenths {
+    Perfect11 = "Perfect11",
     Sharpened11 = "Sharpened11",
     Flattened11 = "Flattened11",
-    Major13 = "Major13",
 }
-export type Interval = keyof typeof Intervals;
+export type Eleventh = keyof typeof Elevenths;
+
+export enum Thirteenths {
+    Major13 = "Major13",
+    Minor13 = "Minor13",
+}
+export type Thirteenth = keyof typeof Thirteenths;
 
 export enum Addeds {
     Add9 = "Add9",
     Add11 = "Add11",
     Add13 = "Add13",
-    Major6 = "Major6",
-    SixNine = "SixNine",
 }
 export type Added = keyof typeof Addeds;
 
 export enum Suspendeds {
     Sus4 = "Sus4",
     Sus2 = "Sus2",
-    Sus2Sus4 = "Sus2Sus4",
 }
 export type Suspended = keyof typeof Suspendeds;
 
-export interface IChord {
+export enum AlteredFifths {
+    Sharpened5 = "Sharpened5",
+    Flattened5 = "Flattened5",
+}
+export type AlteredFifth = keyof typeof AlteredFifths;
+
+export interface IChordSymbolStructure {
+    quality: Qualities | undefined;
+
+    seventh: Sevenths | undefined;
+
+    ninth: Ninths | undefined;
+
+    eleventh: Elevenths | undefined;
+
+    thirteenth: Thirteenths | undefined;
+
+    addeds: Set<Addeds>;
+
+    suspendeds: Set<Suspendeds>;
+
+    alteredFifth: AlteredFifths | undefined;
+}
+
+export interface IChordSymbol extends IChordSymbolStructure {
     /**
      * The main note
      */
     rootNote: Notes;
-
-    quality: Qualities;
-
-    interval: Intervals | undefined;
-
-    added: Addeds | undefined;
-
-    suspended: Suspendeds | undefined;
 
     /**
      * For example: C/G
@@ -81,17 +105,6 @@ export interface IChord {
     bassNote: Notes | undefined;
 }
 
-export interface INamedChord extends IChord {
+export interface INamedChordSymbol extends IChordSymbol {
     name: string;
 }
-
-// TODO(mdanka): add naming options for printing
-// export interface IChordNamingOption {
-//     augmented: "aug" | "+";
-//     diminished: "dim" | "°";
-//     majorInterval: "maj" | "M";
-//     /**
-//      * `undefined` uses the majorInterval
-//      */
-//     majorSeventh: undefined | "Δ";
-// }

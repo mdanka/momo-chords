@@ -1,109 +1,175 @@
-import { IChord, Notes, Qualities, Intervals } from "../src";
+import { IChordSymbol, Notes, Qualities, Sevenths, Thirteenths, Ninths } from "../src";
 
 export interface IChordPair {
     name: string;
-    chord: IChord;
+    chordSymbol: IChordSymbol;
 }
 
 export namespace TestData {
     export const correctPairsWithCanonicalNames: IChordPair[] = [
         {
             name: "A",
-            chord: {
+            chordSymbol: {
                 rootNote: Notes.A,
-                quality: Qualities.Major,
-                interval: undefined,
-                added: undefined,
-                suspended: undefined,
+                quality: undefined,
+                seventh: undefined,
+                ninth: undefined,
+                eleventh: undefined,
+                thirteenth: undefined,
+                addeds: new Set(),
+                suspendeds: new Set(),
+                alteredFifth: undefined,
                 bassNote: undefined,
             },
         },
         {
             name: "Bb",
-            chord: {
+            chordSymbol: {
                 rootNote: Notes.BFlat,
-                quality: Qualities.Major,
-                interval: undefined,
-                added: undefined,
-                suspended: undefined,
+                quality: undefined,
+                seventh: undefined,
+                ninth: undefined,
+                eleventh: undefined,
+                thirteenth: undefined,
+                addeds: new Set(),
+                suspendeds: new Set(),
+                alteredFifth: undefined,
                 bassNote: undefined,
             },
         },
         {
             name: "C#",
-            chord: {
+            chordSymbol: {
                 rootNote: Notes.CSharp,
-                quality: Qualities.Major,
-                interval: undefined,
-                added: undefined,
-                suspended: undefined,
+                quality: undefined,
+                seventh: undefined,
+                ninth: undefined,
+                eleventh: undefined,
+                thirteenth: undefined,
+                addeds: new Set(),
+                suspendeds: new Set(),
+                alteredFifth: undefined,
                 bassNote: undefined,
             },
         },
         {
             name: "Am",
-            chord: {
+            chordSymbol: {
                 rootNote: Notes.A,
                 quality: Qualities.Minor,
-                interval: undefined,
-                added: undefined,
-                suspended: undefined,
+                seventh: undefined,
+                ninth: undefined,
+                eleventh: undefined,
+                thirteenth: undefined,
+                addeds: new Set(),
+                suspendeds: new Set(),
+                alteredFifth: undefined,
                 bassNote: undefined,
             },
         },
         {
             name: "Bbm",
-            chord: {
+            chordSymbol: {
                 rootNote: Notes.BFlat,
                 quality: Qualities.Minor,
-                interval: undefined,
-                added: undefined,
-                suspended: undefined,
+                seventh: undefined,
+                ninth: undefined,
+                eleventh: undefined,
+                thirteenth: undefined,
+                addeds: new Set(),
+                suspendeds: new Set(),
+                alteredFifth: undefined,
                 bassNote: undefined,
             },
         },
         {
             name: "C#m",
-            chord: {
+            chordSymbol: {
                 rootNote: Notes.CSharp,
                 quality: Qualities.Minor,
-                interval: undefined,
-                added: undefined,
-                suspended: undefined,
+                seventh: undefined,
+                ninth: undefined,
+                eleventh: undefined,
+                thirteenth: undefined,
+                addeds: new Set(),
+                suspendeds: new Set(),
+                alteredFifth: undefined,
                 bassNote: undefined,
             },
         },
         {
             name: "Dbm/G#",
-            chord: {
+            chordSymbol: {
                 rootNote: Notes.DFlat,
                 quality: Qualities.Minor,
-                interval: undefined,
-                added: undefined,
-                suspended: undefined,
+                seventh: undefined,
+                ninth: undefined,
+                eleventh: undefined,
+                thirteenth: undefined,
+                addeds: new Set(),
+                suspendeds: new Set(),
+                alteredFifth: undefined,
                 bassNote: Notes.GSharp,
             },
         },
         {
             name: "G#maj7",
-            chord: {
+            chordSymbol: {
                 rootNote: Notes.GSharp,
                 quality: Qualities.Major,
-                interval: Intervals.Major7,
-                added: undefined,
-                suspended: undefined,
+                seventh: Sevenths.Seventh,
+                ninth: undefined,
+                eleventh: undefined,
+                thirteenth: undefined,
+                addeds: new Set(),
+                suspendeds: new Set(),
+                alteredFifth: undefined,
                 bassNote: undefined,
             },
         },
         {
             name: "Bmmaj13/F#",
-            chord: {
+            chordSymbol: {
                 rootNote: Notes.B,
-                quality: Qualities.Minor,
-                interval: Intervals.Major13,
-                added: undefined,
-                suspended: undefined,
+                quality: Qualities.MinorMajor,
+                seventh: undefined,
+                ninth: undefined,
+                eleventh: undefined,
+                thirteenth: Thirteenths.Major13,
+                addeds: new Set(),
+                suspendeds: new Set(),
+                alteredFifth: undefined,
                 bassNote: Notes.FSharp,
+            },
+        },
+        {
+            name: "A7b9b13",
+            chordSymbol: {
+                rootNote: Notes.A,
+                quality: undefined,
+                seventh: Sevenths.Seventh,
+                ninth: Ninths.Minor9,
+                eleventh: undefined,
+                thirteenth: Thirteenths.Minor13,
+                addeds: new Set(),
+                suspendeds: new Set(),
+                alteredFifth: undefined,
+                bassNote: undefined,
+            },
+        },
+        {
+            name: "C#07",
+            chordSymbol: {
+                rootNote: Notes.CSharp,
+                quality: Qualities.Diminished,
+                seventh: Sevenths.Seventh,
+                ninth: undefined,
+                eleventh: undefined,
+                thirteenth: undefined,
+                addeds: new Set(),
+                suspendeds: new Set(),
+                alteredFifth: undefined,
+                bassNote: undefined,
             },
         },
     ];
@@ -111,23 +177,31 @@ export namespace TestData {
     export const correctPairsWithNonCanonicalNames: IChordPair[] = [
         {
             name: "G#M7",
-            chord: {
+            chordSymbol: {
                 rootNote: Notes.GSharp,
                 quality: Qualities.Major,
-                interval: Intervals.Major7,
-                added: undefined,
-                suspended: undefined,
+                seventh: Sevenths.Seventh,
+                ninth: undefined,
+                eleventh: undefined,
+                thirteenth: undefined,
+                addeds: new Set(),
+                suspendeds: new Set(),
+                alteredFifth: undefined,
                 bassNote: undefined,
             },
         },
         {
             name: "BmM13/F#",
-            chord: {
+            chordSymbol: {
                 rootNote: Notes.B,
-                quality: Qualities.Minor,
-                interval: Intervals.Major13,
-                added: undefined,
-                suspended: undefined,
+                quality: Qualities.MinorMajor,
+                seventh: undefined,
+                ninth: undefined,
+                eleventh: undefined,
+                thirteenth: Thirteenths.Major13,
+                addeds: new Set(),
+                suspendeds: new Set(),
+                alteredFifth: undefined,
                 bassNote: Notes.FSharp,
             },
         },

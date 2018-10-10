@@ -4564,5 +4564,7 @@ export namespace TestDataChordList {
         "Badd9/Gb",
     ];
 
-    export const chords = allChords.filter(chord => !chord.includes("#5") && !chord.includes("b5"));
+    // export const chords = allChords.filter(chord => !chord.includes("#5") && !chord.includes("b5"));
+    export const chords = allChords.filter(chord => !chord.includes("bb"));
+    // export const chords = allChords;
 }
