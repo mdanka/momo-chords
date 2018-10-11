@@ -1,170 +1,293 @@
+import { ChordSymbolParser } from "./chordSymbolParser";
 import {
-    IChord,
-    Notes,
-    Note,
+    IChordSymbol,
     Qualities,
-    Intervals,
+    Ninths,
+    Elevenths,
+    Thirteenths,
+    Sevenths,
     Addeds,
     Suspendeds,
-    Quality,
-    Interval,
-    Suspended,
-    Added,
+    AlteredFifths,
+    IChordStructure,
+    IChord,
 } from "./types";
-import { Naming } from "./naming";
 
-interface IChordsRegexMatch {
-    rootNoteString: Note;
-    qualityString: Quality | undefined;
-    intervalString: Interval | undefined;
-    addedString: Added | undefined;
-    suspendedString: Suspended | undefined;
-    bassNoteString: Note | undefined;
-}
-
-interface IMatchingOptions {
-    isMatching: boolean;
-    isOptional: boolean;
-    isShortestFirst: boolean;
+interface IConstraint {
+    1?: boolean;
+    2?: boolean;
+    3?: boolean;
+    4?: boolean;
+    5?: boolean;
+    6?: boolean;
+    7?: boolean;
+    8?: boolean;
+    9?: boolean;
+    10?: boolean;
+    11?: boolean;
 }
 
 export namespace ChordParser {
-    const chordsRegex = getChordsRegex();
+    export function isValidString(value: string): boolean {
+        return parse(value) !== undefined;
+    }
 
     export function parse(value: string): IChord | undefined {
-        const regexResult = matchChordsRegex(value);
-        return chordsRegexMatchToChord(regexResult);
+        const chordSymbol = ChordSymbolParser.parse(value);
+        return chordSymbol === undefined ? undefined : symbolToChord(chordSymbol);
     }
 
-    function chordsRegexMatchToChord(result: IChordsRegexMatch | undefined): IChord | undefined {
-        if (result === undefined) {
-            return undefined;
-        }
-        const { rootNoteString, qualityString, intervalString, addedString, suspendedString, bassNoteString } = result;
-        const rootNote: Notes | undefined =
-            rootNoteString === undefined ? undefined : Naming.notesLookup.get(rootNoteString);
-        if (rootNote === undefined) {
-            throw new Error(`[chords] Error when parsing chord: couldn't find root note ${rootNoteString}`);
-        }
-        const quality: Qualities | undefined =
-            qualityString === undefined ? undefined : Naming.qualitiesLookup.get(qualityString);
-        if (quality === undefined) {
-            throw new Error(`[chords] Error when parsing chord: couldn't find quality ${qualityString}`);
-        }
-        const interval: Intervals | undefined =
-            intervalString === undefined ? undefined : Naming.intervalsLookup.get(intervalString);
-        const added: Addeds | undefined = addedString === undefined ? undefined : Naming.addedsLookup.get(addedString);
-        const suspended: Suspendeds | undefined =
-            suspendedString === undefined ? undefined : Naming.suspendedsLookup.get(suspendedString);
-        const bassNote: Notes | undefined =
-            bassNoteString === undefined ? undefined : Naming.notesLookup.get(bassNoteString);
-
-        return {
-            rootNote,
-            quality,
-            interval,
-            added,
-            suspended,
-            bassNote,
-        };
-    }
-
-    function matchChordsRegex(value: string): IChordsRegexMatch | undefined {
-        const result = value.match(new RegExp(chordsRegex));
-        return result === null
+    function symbolToChord(chordSymbol: IChordSymbol): IChord | undefined {
+        const structure = symbolToStructure(chordSymbol);
+        return structure === undefined
             ? undefined
             : {
-                  rootNoteString: result[1] as Note,
-                  qualityString: result[2] as Quality,
-                  intervalString: result[3] as Interval | undefined,
-                  addedString: result[4] as Added | undefined,
-                  suspendedString: result[5] as Suspended | undefined,
-                  bassNoteString: result[6] as Note | undefined,
+                  symbol: chordSymbol,
+                  structure,
               };
     }
 
-    function getChordsRegex() {
-        return getRegexEntireStringMatch(getChordsContentRegex());
+    function symbolToStructure(chordSymbol: IChordSymbol): IChordStructure | undefined {
+        const constraints = symbolToConstraints(chordSymbol);
+        return resolveConstraints(constraints);
     }
 
-    function getChordsContentRegex() {
-        // This will create a regex matching (rootNote)(quality)(interval)?(added)?(suspended)?(?:/(bassNote))?
-        return `${getRootNotesRegex()}${getQualitiesRegex()}${getIntervalsRegex()}${getAddedsRegex()}${getSuspendedsRegex()}${getBassNotesRegex()}`;
-    }
-
-    function getRootNotesRegex() {
-        return getRegexFromArrayMap(Naming.notes, { isMatching: true, isOptional: false, isShortestFirst: false });
-    }
-
-    function getQualitiesRegex() {
-        // Note that with qualities we take the shortest first, because we'd like the interval to consume characters when posible
-        return getRegexFromArrayMap(Naming.qualities, { isMatching: true, isOptional: false, isShortestFirst: true });
-    }
-
-    function getIntervalsRegex() {
-        return getRegexFromArrayMap(Naming.intervals, { isMatching: true, isOptional: true, isShortestFirst: false });
-    }
-
-    function getAddedsRegex() {
-        return getRegexFromArrayMap(Naming.addeds, { isMatching: true, isOptional: true, isShortestFirst: false });
-    }
-
-    function getSuspendedsRegex() {
-        return getRegexFromArrayMap(Naming.suspendeds, { isMatching: true, isOptional: true, isShortestFirst: false });
-    }
-
-    function getBassNotesRegex() {
-        return getRegexGroup(
-            "/" + getRegexFromArrayMap(Naming.notes, { isMatching: true, isOptional: false, isShortestFirst: false }),
-            false,
-            true,
-        );
-    }
-
-    function getRegexFromArrayMap<T>(map: Map<T, string[]>, matchingOptions: IMatchingOptions) {
-        const values = getValuesFromArrayMap(map);
-        return getRegexFromStringList(values, matchingOptions);
-    }
-
-    function getRegexFromStringList(values: string[], matchingOptions: IMatchingOptions) {
-        const { isShortestFirst, isMatching, isOptional } = matchingOptions;
-        const sortedValues = sortValuesByLength(values, isShortestFirst);
-        const escapedValues = sortedValues.map(escapeRegex);
-        const disjunction = getRegexDisjunction(escapedValues, isMatching, isOptional);
-        return disjunction;
-    }
-
-    function getRegexDisjunction(values: string[], isMatching: boolean, isOptional: boolean) {
-        return getRegexGroup(values.join("|"), isMatching, isOptional);
-    }
-
-    function getRegexGroup(regex: string, isMatching: boolean, isOptional: boolean) {
-        return `(${isMatching ? "" : "?:"}${regex})${isOptional ? "?" : ""}`;
-    }
-
-    function getRegexEntireStringMatch(regex: string) {
-        return `^${regex}$`;
-    }
-
-    function sortValuesByLength(values: string[], isShortestFirst: boolean) {
-        const resultMultiplier = isShortestFirst ? 1 : -1;
-        return values.sort(function(a, b) {
-            const lengthDifference = a.length - b.length;
-            if (lengthDifference !== 0) {
-                return (lengthDifference < 0 ? -1 : 1) * resultMultiplier;
-            }
-            return (a > b ? -1 : 1) * resultMultiplier;
+    function resolveConstraints(constraints: IConstraint[]): IChordStructure | undefined {
+        const collectedConstraints: Set<boolean | undefined>[] = [];
+        for (let i = 0; i < 12; i++) {
+            collectedConstraints.push(new Set());
+        }
+        constraints.forEach(constraint => {
+            collectedConstraints[1].add(constraint[1]);
+            collectedConstraints[2].add(constraint[2]);
+            collectedConstraints[3].add(constraint[3]);
+            collectedConstraints[4].add(constraint[4]);
+            collectedConstraints[5].add(constraint[5]);
+            collectedConstraints[6].add(constraint[6]);
+            collectedConstraints[7].add(constraint[7]);
+            collectedConstraints[8].add(constraint[8]);
+            collectedConstraints[9].add(constraint[9]);
+            collectedConstraints[10].add(constraint[10]);
+            collectedConstraints[11].add(constraint[11]);
         });
+        const chordMaybe = {
+            1: constraintSetToValue(collectedConstraints[1]),
+            2: constraintSetToValue(collectedConstraints[2]),
+            3: constraintSetToValue(collectedConstraints[3]),
+            4: constraintSetToValue(collectedConstraints[4]),
+            5: constraintSetToValue(collectedConstraints[5]),
+            6: constraintSetToValue(collectedConstraints[6]),
+            7: constraintSetToValue(collectedConstraints[7]),
+            8: constraintSetToValue(collectedConstraints[8]),
+            9: constraintSetToValue(collectedConstraints[9]),
+            10: constraintSetToValue(collectedConstraints[10]),
+            11: constraintSetToValue(collectedConstraints[11]),
+        };
+        if (
+            chordMaybe[1] === undefined ||
+            chordMaybe[2] === undefined ||
+            chordMaybe[3] === undefined ||
+            chordMaybe[4] === undefined ||
+            chordMaybe[5] === undefined ||
+            chordMaybe[6] === undefined ||
+            chordMaybe[7] === undefined ||
+            chordMaybe[8] === undefined ||
+            chordMaybe[9] === undefined ||
+            chordMaybe[10] === undefined ||
+            chordMaybe[11] === undefined
+        ) {
+            return undefined;
+        }
+        return {
+            1: chordMaybe[1]!,
+            2: chordMaybe[2]!,
+            3: chordMaybe[3]!,
+            4: chordMaybe[4]!,
+            5: chordMaybe[5]!,
+            6: chordMaybe[6]!,
+            7: chordMaybe[7]!,
+            8: chordMaybe[8]!,
+            9: chordMaybe[9]!,
+            10: chordMaybe[10]!,
+            11: chordMaybe[11]!,
+        };
     }
 
-    function getValuesFromArrayMap<T>(map: Map<T, string[]>) {
-        const result: string[] = [];
-        map.forEach(value => result.push(...value));
-        return result;
+    function constraintSetToValue(constraintSet: Set<boolean | undefined>) {
+        if (constraintSet.has(true) && constraintSet.has(false)) {
+            return undefined;
+        }
+        if (constraintSet.has(true)) {
+            return true;
+        }
+        return false;
     }
 
-    // Based on https://stackoverflow.com/a/6969486
-    function escapeRegex(value: string) {
-        return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    function symbolToConstraints(symbol: IChordSymbol) {
+        const constraints: IConstraint[] = [];
+        const { quality, seventh, ninth, eleventh, thirteenth, addeds, suspendeds, alteredFifth } = symbol;
+        const isExtended =
+            seventh !== undefined || ninth !== undefined || eleventh !== undefined || thirteenth !== undefined;
+        const qualityConstraints = isExtended ? qualityExtendedConstraints : qualityBasicConstraints;
+
+        constraints.push(getConstraint(quality, qualityConstraints));
+        constraints.push(getConstraint(seventh, seventhConstraints));
+        constraints.push(getConstraint(ninth, ninthConstraints));
+        constraints.push(getConstraint(eleventh, eleventhConstraints));
+        constraints.push(getConstraint(thirteenth, thirteenthConstraints));
+        constraints.push(...getConstraintsForSet(addeds, addedConstraints));
+        constraints.push(...getConstraintsForSet(suspendeds, suspendedConstraints));
+        constraints.push(getConstraint(alteredFifth, alteredFifthConstraints));
+
+        /**
+         * If the quality is not defined and the chord is extended, then
+         * we have a dominant (minor) 7th.
+         */
+        if (quality === undefined && isExtended) {
+            constraints.push({ 10: true });
+        }
+        // If 11 or 13 is present, then 9 is implied
+        if (ninth === undefined && (eleventh !== undefined || thirteenth !== undefined)) {
+            constraints.push({ 2: true });
+        }
+        // If 13 is present, then 11 is implied
+        // TODO(mdanka): double-check this, there's an exception here somewhere
+        if (eleventh === undefined && thirteenth !== undefined) {
+            constraints.push({ 5: true });
+        }
+        /**
+         * If the fifth is not specified via quality or alteration,
+         * then it is perfect.
+         */
+        if (
+            alteredFifth === undefined &&
+            (quality === undefined ||
+                [Qualities.Augmented, Qualities.AugmentedMajor, Qualities.Diminished, Qualities.HalfDiminished].indexOf(
+                    quality,
+                ) === -1)
+        ) {
+            constraints.push({ 7: true });
+        }
+        /**
+         * If the quality is not defined or unclear and the thirds are not
+         * already excluded or defined (e.g., by suspended chords or power chords), then the chord is a
+         * major chord. E.g.: C, C7, C9, Cmaj7sus4
+         */
+        if ((quality === undefined || (quality === Qualities.Major && isExtended)) && suspendeds.size === 0) {
+            constraints.push({ 4: true });
+        }
+
+        return constraints;
     }
+
+    function getConstraintsForSet<T>(symbols: Set<T>, lookup: Map<T, IConstraint>) {
+        const constraints: IConstraint[] = [];
+        symbols.forEach((symbol: T) => {
+            constraints.push(getConstraint(symbol, lookup));
+        });
+        return constraints;
+    }
+
+    function getConstraint<T>(symbol: T | undefined, lookup: Map<T, IConstraint>) {
+        if (symbol === undefined) {
+            return {};
+        }
+        const constraint = lookup.get(symbol);
+        if (constraint === undefined) {
+            throw new Error(`[chords] Couldn't find symbol '${symbol}' in the constraint lookup table`);
+        }
+        return constraint;
+    }
+
+    const qualityBasicConstraints: Map<Qualities, IConstraint> = new Map([
+        [Qualities.Major, { 4: true }],
+        [Qualities.Minor, { 3: true }],
+        [Qualities.MinorMajor, undefined],
+        [Qualities.Augmented, { 4: true, 8: true }],
+        [Qualities.AugmentedMajor, undefined],
+        [Qualities.Diminished, { 3: true, 6: true }],
+        [Qualities.HalfDiminished, undefined],
+        [
+            Qualities.Power,
+            {
+                1: false,
+                2: false,
+                3: false,
+                4: false,
+                5: false,
+                6: false,
+                7: true,
+                8: false,
+                9: false,
+                10: false,
+                11: false,
+            },
+        ],
+    ] as [Qualities, IConstraint][]);
+
+    const qualityExtendedConstraints: Map<Qualities, IConstraint> = new Map([
+        [Qualities.Major, { 11: true }], // third not specified because it might be a suspended chord
+        [Qualities.Minor, { 3: true, 10: true }],
+        [Qualities.MinorMajor, { 3: true, 11: true }],
+        [Qualities.Augmented, { 4: true, 8: true, 10: true }],
+        [Qualities.AugmentedMajor, { 4: true, 8: true, 11: true }],
+        [Qualities.Diminished, { 3: true, 6: true, 9: true }],
+        [Qualities.HalfDiminished, { 3: true, 6: true, 10: true }],
+        [
+            Qualities.Power,
+            {
+                1: false,
+                2: false,
+                3: false,
+                4: false,
+                5: false,
+                6: false,
+                7: true,
+                8: false,
+                9: false,
+                10: false,
+                11: false,
+            },
+        ],
+    ] as [Qualities, IConstraint][]);
+
+    const seventhConstraints: Map<Sevenths, IConstraint> = new Map([[Sevenths.Seventh, {}]] as [
+        Sevenths,
+        IConstraint
+    ][]);
+
+    const ninthConstraints: Map<Ninths, IConstraint> = new Map([
+        [Ninths.Major9, { 2: true }],
+        [Ninths.Minor9, { 1: true }],
+        [Ninths.Sharpened9, { 3: true }],
+    ] as [Ninths, IConstraint][]);
+
+    const eleventhConstraints: Map<Elevenths, IConstraint> = new Map([
+        [Elevenths.Perfect11, { 5: true }],
+        [Elevenths.Sharpened11, { 6: true }],
+        [Elevenths.Flattened11, { 4: true }],
+    ] as [Elevenths, IConstraint][]);
+
+    const thirteenthConstraints: Map<Thirteenths, IConstraint> = new Map([
+        [Thirteenths.Major13, { 9: true }],
+        [Thirteenths.Minor13, { 8: true }],
+    ] as [Thirteenths, IConstraint][]);
+
+    const addedConstraints: Map<Addeds, IConstraint> = new Map([
+        [Addeds.Add9, { 2: true }],
+        [Addeds.Add11, { 5: true }],
+        [Addeds.Add13, { 9: true }],
+    ] as [Addeds, IConstraint][]);
+
+    // Suspendeds disallow the minor/major third
+    const suspendedConstraints: Map<Suspendeds, IConstraint> = new Map([
+        [Suspendeds.Sus4, { 3: false, 4: false, 5: true }],
+        [Suspendeds.Sus2, { 2: true, 3: false, 4: false }],
+    ] as [Suspendeds, IConstraint][]);
+
+    // Altered fifths disallow the perfect fifth
+    const alteredFifthConstraints: Map<AlteredFifths, IConstraint> = new Map([
+        [AlteredFifths.Sharpened5, { 7: false, 8: true }],
+        [AlteredFifths.Flattened5, { 6: true, 7: false }],
+    ] as [AlteredFifths, IConstraint][]);
 }

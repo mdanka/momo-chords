@@ -1,6 +1,6 @@
-import { IChord } from "./types";
-import { ChordParser } from "./chordParser";
+import { IChordSymbol, IChord } from "./types";
 import { ChordPrinter } from "./chordPrinter";
+import { ChordParser } from "./chordParser";
 
 export class Chords {
     public parse = (value: string): IChord | undefined => {
@@ -8,10 +8,10 @@ export class Chords {
     };
 
     public isChord = (value: string): boolean => {
-        return this.parse(value) !== undefined;
+        return ChordParser.isValidString(value);
     };
 
-    public print = (chord: IChord): string => {
+    public print = (chord: IChordSymbol): string => {
         return ChordPrinter.print(chord);
     };
 }

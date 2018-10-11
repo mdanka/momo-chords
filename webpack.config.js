@@ -16,14 +16,13 @@ module.exports = (function(options) {
     devtool: 'source-map',
 
     module: {
-        preLoaders: [
+        loaders: [
             {
                 test: /\.js$/,
                 loader: "source-map-loader",
                 exclude: /node_modules/,
+                enforce: "pre",
             },
-        ],
-        loaders: [
         { test: /\.ts$/, loader: "awesome-typescript-loader" }
         ]
     },
