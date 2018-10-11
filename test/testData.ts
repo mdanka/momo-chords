@@ -308,7 +308,7 @@ export namespace TestData {
             },
         },
         {
-            name: "C#07",
+            name: "C#dim7",
             chord: {
                 symbol: {
                     rootNote: Notes.CSharp,
@@ -397,6 +397,36 @@ export namespace TestData {
                     9: true,
                     10: false,
                     11: true,
+                },
+            },
+        },
+        {
+            name: "C#07",
+            chord: {
+                symbol: {
+                    rootNote: Notes.CSharp,
+                    quality: Qualities.Diminished,
+                    seventh: Sevenths.Seventh,
+                    ninth: undefined,
+                    eleventh: undefined,
+                    thirteenth: undefined,
+                    addeds: new Set(),
+                    suspendeds: new Set(),
+                    alteredFifth: undefined,
+                    bassNote: undefined,
+                },
+                structure: {
+                    1: false,
+                    2: false,
+                    3: true,
+                    4: false,
+                    5: false,
+                    6: true,
+                    7: false,
+                    8: false,
+                    9: true,
+                    10: false,
+                    11: false,
                 },
             },
         },

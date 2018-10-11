@@ -43,20 +43,26 @@ interface IMatchingOptions {
     isMultiple: boolean;
 }
 
-export namespace ChordSymbolParser {
-    const chordsRegex = getChordsRegex();
+export class ChordSymbolParser {
+    private chordsRegex: string;
+    private naming: Naming;
 
-    export function parse(value: string): IChordSymbol | undefined {
-        const regexResult = matchChordsRegex(value);
-        const symbol = chordsRegexMatchToChord(regexResult);
+    public constructor(naming: Naming) {
+        this.naming = naming;
+        this.chordsRegex = this.getChordsRegex();
+    }
+
+    public parse(value: string): IChordSymbol | undefined {
+        const regexResult = this.matchChordsRegex(value);
+        const symbol = this.chordsRegexMatchToChord(regexResult);
         if (symbol === undefined) {
             return undefined;
         }
-        const isValid = isSymbolValid(symbol);
+        const isValid = this.isSymbolValid(symbol);
         return isValid ? symbol : undefined;
     }
 
-    function isSymbolValid(chordSymbol: IChordSymbol): boolean {
+    private isSymbolValid(chordSymbol: IChordSymbol): boolean {
         const { quality, seventh, ninth, eleventh, thirteenth, addeds, suspendeds, alteredFifth } = chordSymbol;
         /**
          * The alteredFifth cannot appear at the same time with fifth-altering qualities.
@@ -80,7 +86,7 @@ export namespace ChordSymbolParser {
         return isAlteredFifthOk && isPowerChordOk;
     }
 
-    function chordsRegexMatchToChord(result: IChordsRegexMatch | undefined): IChordSymbol | undefined {
+    private chordsRegexMatchToChord(result: IChordsRegexMatch | undefined): IChordSymbol | undefined {
         if (result === undefined) {
             return undefined;
         }
@@ -97,36 +103,40 @@ export namespace ChordSymbolParser {
             bassNoteString,
         } = result;
         const rootNote: Notes | undefined =
-            rootNoteString === undefined ? undefined : Naming.notesLookup.get(rootNoteString);
+            rootNoteString === undefined ? undefined : this.naming.lookups.notes.get(rootNoteString);
         if (rootNote === undefined) {
             throw new Error(`[chords] Error when parsing chord: couldn't find root note ${rootNoteString}`);
         }
         const quality: Qualities | undefined =
-            qualityString === undefined ? undefined : Naming.qualitiesLookup.get(qualityString);
+            qualityString === undefined ? undefined : this.naming.lookups.qualities.get(qualityString);
         const seventh: Sevenths | undefined =
-            seventhString === undefined ? undefined : Naming.seventhsLookup.get(seventhString);
-        const ninth: Ninths | undefined = ninthString === undefined ? undefined : Naming.ninthsLookup.get(ninthString);
+            seventhString === undefined ? undefined : this.naming.lookups.sevenths.get(seventhString);
+        const ninth: Ninths | undefined =
+            ninthString === undefined ? undefined : this.naming.lookups.ninths.get(ninthString);
         const eleventh: Elevenths | undefined =
-            eleventhString === undefined ? undefined : Naming.eleventhsLookup.get(eleventhString);
+            eleventhString === undefined ? undefined : this.naming.lookups.elevenths.get(eleventhString);
         const thirteenth: Thirteenths | undefined =
-            thirteenthString === undefined ? undefined : Naming.thirteenthsLookup.get(thirteenthString);
+            thirteenthString === undefined ? undefined : this.naming.lookups.thirteenths.get(thirteenthString);
         const addeds: Set<Addeds> = new Set(
             addedStrings
-                .map(addedString => (addedString === undefined ? undefined : Naming.addedsLookup.get(addedString)))
+                .map(
+                    addedString =>
+                        addedString === undefined ? undefined : this.naming.lookups.addeds.get(addedString),
+                )
                 .filter(value => value !== undefined),
         ) as Set<Addeds>;
         const suspendeds: Set<Suspendeds> = new Set(
             suspendedStrings
                 .map(
                     suspendedString =>
-                        suspendedString === undefined ? undefined : Naming.suspendedsLookup.get(suspendedString),
+                        suspendedString === undefined ? undefined : this.naming.lookups.suspendeds.get(suspendedString),
                 )
                 .filter(value => value !== undefined),
         ) as Set<Suspendeds>;
         const alteredFifth: AlteredFifths | undefined =
-            alteredFifthString === undefined ? undefined : Naming.alteredFifthsLookup.get(alteredFifthString);
+            alteredFifthString === undefined ? undefined : this.naming.lookups.alteredFifths.get(alteredFifthString);
         const bassNote: Notes | undefined =
-            bassNoteString === undefined ? undefined : Naming.notesLookup.get(bassNoteString);
+            bassNoteString === undefined ? undefined : this.naming.lookups.notes.get(bassNoteString);
 
         return {
             rootNote,
@@ -142,8 +152,8 @@ export namespace ChordSymbolParser {
         };
     }
 
-    function matchChordsRegex(value: string): IChordsRegexMatch | undefined {
-        const result = value.match(new RegExp(chordsRegex));
+    private matchChordsRegex(value: string): IChordsRegexMatch | undefined {
+        const result = value.match(new RegExp(this.chordsRegex));
         return result === null
             ? undefined
             : {
@@ -160,17 +170,17 @@ export namespace ChordSymbolParser {
               };
     }
 
-    function getChordsRegex() {
-        return getRegexEntireStringMatch(getChordsContentRegex());
+    private getChordsRegex() {
+        return this.getRegexEntireStringMatch(this.getChordsContentRegex());
     }
 
-    function getChordsContentRegex() {
+    private getChordsContentRegex() {
         // This will create a regex matching (rootNote)(quality)(interval7,9,11,13)?(added)?(suspended)?(alteredFifth)?(?:/(bassNote))?
-        return `${getRootNotesRegex()}${getQualitiesRegex()}${getSeventhsRegex()}${getNinthsRegex()}${getEleventhsRegex()}${getThirteenthsRegex()}${getAddedsRegex()}${getSuspendedsRegex()}${getAlteredFifthsRegex()}${getBassNotesRegex()}`;
+        return `${this.getRootNotesRegex()}${this.getQualitiesRegex()}${this.getSeventhsRegex()}${this.getNinthsRegex()}${this.getEleventhsRegex()}${this.getThirteenthsRegex()}${this.getAddedsRegex()}${this.getSuspendedsRegex()}${this.getAlteredFifthsRegex()}${this.getBassNotesRegex()}`;
     }
 
-    function getRootNotesRegex() {
-        return getRegexFromArrayMap(Naming.notes, {
+    private getRootNotesRegex() {
+        return this.getRegexFromArrayMap(this.naming.names.notes, {
             isMatching: true,
             isOptional: false,
             isShortestFirst: false,
@@ -178,9 +188,9 @@ export namespace ChordSymbolParser {
         });
     }
 
-    function getQualitiesRegex() {
+    private getQualitiesRegex() {
         // Note that with qualities we take the shortest first, because we'd like the interval to consume characters when posible
-        return getRegexFromArrayMap(Naming.qualities, {
+        return this.getRegexFromArrayMap(this.naming.names.qualities, {
             isMatching: true,
             isOptional: true,
             isShortestFirst: true,
@@ -188,8 +198,8 @@ export namespace ChordSymbolParser {
         });
     }
 
-    function getSeventhsRegex() {
-        return getRegexFromArrayMap(Naming.sevenths, {
+    private getSeventhsRegex() {
+        return this.getRegexFromArrayMap(this.naming.names.sevenths, {
             isMatching: true,
             isOptional: true,
             isShortestFirst: false,
@@ -197,8 +207,8 @@ export namespace ChordSymbolParser {
         });
     }
 
-    function getNinthsRegex() {
-        return getRegexFromArrayMap(Naming.ninths, {
+    private getNinthsRegex() {
+        return this.getRegexFromArrayMap(this.naming.names.ninths, {
             isMatching: true,
             isOptional: true,
             isShortestFirst: false,
@@ -206,8 +216,8 @@ export namespace ChordSymbolParser {
         });
     }
 
-    function getEleventhsRegex() {
-        return getRegexFromArrayMap(Naming.elevenths, {
+    private getEleventhsRegex() {
+        return this.getRegexFromArrayMap(this.naming.names.elevenths, {
             isMatching: true,
             isOptional: true,
             isShortestFirst: false,
@@ -215,8 +225,8 @@ export namespace ChordSymbolParser {
         });
     }
 
-    function getThirteenthsRegex() {
-        return getRegexFromArrayMap(Naming.thirteenths, {
+    private getThirteenthsRegex() {
+        return this.getRegexFromArrayMap(this.naming.names.thirteenths, {
             isMatching: true,
             isOptional: true,
             isShortestFirst: false,
@@ -224,16 +234,16 @@ export namespace ChordSymbolParser {
         });
     }
 
-    function getAddedsRegex() {
-        return getRegexFromOrderedEnumValues(addedOrder, Naming.addeds);
+    private getAddedsRegex() {
+        return this.getRegexFromOrderedEnumValues(addedOrder, this.naming.names.addeds);
     }
 
-    function getSuspendedsRegex() {
-        return getRegexFromOrderedEnumValues(suspendedOrder, Naming.suspendeds);
+    private getSuspendedsRegex() {
+        return this.getRegexFromOrderedEnumValues(suspendedOrder, this.naming.names.suspendeds);
     }
 
-    function getAlteredFifthsRegex() {
-        return getRegexFromArrayMap(Naming.alteredFifths, {
+    private getAlteredFifthsRegex() {
+        return this.getRegexFromArrayMap(this.naming.names.alteredFifths, {
             isMatching: true,
             isOptional: true,
             isShortestFirst: false,
@@ -241,10 +251,10 @@ export namespace ChordSymbolParser {
         });
     }
 
-    function getBassNotesRegex() {
-        return getRegexGroup(
+    private getBassNotesRegex() {
+        return this.getRegexGroup(
             "/" +
-                getRegexFromArrayMap(Naming.notes, {
+                this.getRegexFromArrayMap(this.naming.names.notes, {
                     isMatching: true,
                     isOptional: false,
                     isShortestFirst: false,
@@ -256,10 +266,10 @@ export namespace ChordSymbolParser {
         );
     }
 
-    function getRegexFromOrderedEnumValues<T>(order: T[], naming: Map<T, string[]>) {
+    private getRegexFromOrderedEnumValues<T>(order: T[], naming: Map<T, string[]>) {
         const orderedNames = order.map(value => naming.get(value)).filter(value => value !== undefined) as string[][];
         const regexes = orderedNames.map(name =>
-            getRegexFromStringList(name, {
+            this.getRegexFromStringList(name, {
                 isMatching: true,
                 isOptional: true,
                 isShortestFirst: false,
@@ -269,24 +279,24 @@ export namespace ChordSymbolParser {
         return regexes.join("");
     }
 
-    function getRegexFromArrayMap<T>(map: Map<T, string[]>, matchingOptions: IMatchingOptions) {
-        const values = getValuesFromArrayMap(map);
-        return getRegexFromStringList(values, matchingOptions);
+    private getRegexFromArrayMap<T>(map: Map<T, string[]>, matchingOptions: IMatchingOptions) {
+        const values = this.getValuesFromArrayMap(map);
+        return this.getRegexFromStringList(values, matchingOptions);
     }
 
-    function getRegexFromStringList(values: string[], matchingOptions: IMatchingOptions) {
+    private getRegexFromStringList(values: string[], matchingOptions: IMatchingOptions) {
         const { isShortestFirst, isMatching, isOptional, isMultiple } = matchingOptions;
-        const sortedValues = sortValuesByLength(values, isShortestFirst);
-        const escapedValues = sortedValues.map(escapeRegex);
-        const disjunction = getRegexDisjunction(escapedValues, isMatching, isOptional, isMultiple);
+        const sortedValues = this.sortValuesByLength(values, isShortestFirst);
+        const escapedValues = sortedValues.map(this.escapeRegex);
+        const disjunction = this.getRegexDisjunction(escapedValues, isMatching, isOptional, isMultiple);
         return disjunction;
     }
 
-    function getRegexDisjunction(values: string[], isMatching: boolean, isOptional: boolean, isMultiple: boolean) {
-        return getRegexGroup(values.join("|"), isMatching, isOptional, isMultiple);
+    private getRegexDisjunction(values: string[], isMatching: boolean, isOptional: boolean, isMultiple: boolean) {
+        return this.getRegexGroup(values.join("|"), isMatching, isOptional, isMultiple);
     }
 
-    function getRegexGroup(regex: string, isMatching: boolean, isOptional: boolean, isMultiple: boolean) {
+    private getRegexGroup(regex: string, isMatching: boolean, isOptional: boolean, isMultiple: boolean) {
         let qualifier: string;
         if (isOptional && isMultiple) {
             qualifier = "*";
@@ -300,11 +310,11 @@ export namespace ChordSymbolParser {
         return `(${isMatching ? "" : "?:"}${regex})${qualifier}`;
     }
 
-    function getRegexEntireStringMatch(regex: string) {
+    private getRegexEntireStringMatch(regex: string) {
         return `^${regex}$`;
     }
 
-    function sortValuesByLength(values: string[], isShortestFirst: boolean) {
+    private sortValuesByLength(values: string[], isShortestFirst: boolean) {
         const resultMultiplier = isShortestFirst ? 1 : -1;
         return values.sort(function(a, b) {
             const lengthDifference = a.length - b.length;
@@ -315,14 +325,14 @@ export namespace ChordSymbolParser {
         });
     }
 
-    function getValuesFromArrayMap<T>(map: Map<T, string[]>) {
+    private getValuesFromArrayMap<T>(map: Map<T, string[]>) {
         const result: string[] = [];
         map.forEach(value => result.push(...value));
         return result;
     }
 
     // Based on https://stackoverflow.com/a/6969486
-    function escapeRegex(value: string) {
+    private escapeRegex(value: string) {
         return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     }
 }
