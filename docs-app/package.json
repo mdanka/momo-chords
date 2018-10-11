@@ -26,7 +26,7 @@
     "classnames": "^2.2.5",
     "es6-shim": "^0.35.3",
     "lodash": "^4.2.0",
-    "momo-chords": "^0.2.4",
+    "momo-chords": "^0.3.0",
     "react": "^16.5.2",
     "react-addons-css-transition-group": "^15.6.2",
     "react-dom": "^16.5.2",

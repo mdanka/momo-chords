@@ -3320,9 +3320,9 @@ mkdirp@0.5.x, "mkdirp@>=0.5 0", mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@~0.5.0:
   dependencies:
     minimist "0.0.8"
 
-momo-chords@^0.2.4:
-  version "0.2.4"
-  resolved "https://registry.yarnpkg.com/momo-chords/-/momo-chords-0.2.4.tgz#6d28a83fd5ec78e08490098ba030017b9abe14b7"
+momo-chords@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/momo-chords/-/momo-chords-0.3.0.tgz#f34ab422ebf02414366d193e1a6a978ffeef869c"
   dependencies:
     commonjs "^0.0.1"
     es6-shim "^0.35.3"

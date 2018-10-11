@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Chords, IChord } from "momo-chords";
+import { Chords, IChord, IChordStructure } from "momo-chords";
 
 interface IAppState {
     chordText: string;
@@ -72,7 +72,7 @@ export class AppContainer extends React.PureComponent<{}, IAppState> {
         if (chord === undefined) {
             return null;
         }
-        const chordName = this.chords.print(chord);
+        const chordName = this.chords.print(chord.symbol);
         const question = "Is this chord incorrectly named?";
         const callToAction = "Click here to report incorrect naming.";
         const issueTitle = `Wrong chord naming: ${chordText} named as ${chordName}`;
@@ -97,10 +97,21 @@ export class AppContainer extends React.PureComponent<{}, IAppState> {
         if (chord === undefined) {
             return null;
         }
-        const { rootNote, quality, interval, added, suspended, bassNote } = chord;
+        const {
+            rootNote,
+            quality,
+            seventh,
+            ninth,
+            eleventh,
+            thirteenth,
+            addeds,
+            suspendeds,
+            alteredFifth,
+            bassNote,
+        } = chord.symbol;
         return (
             <div>
-                <h3>Chord properties</h3>
+                <h3>Chord symbol</h3>
                 <ul className="md-running-text">
                     <li>
                         <strong className="md-strong">Root note: </strong>
@@ -108,19 +119,35 @@ export class AppContainer extends React.PureComponent<{}, IAppState> {
                     </li>
                     <li>
                         <strong className="md-strong">Quality: </strong>
-                        {quality}
+                        {quality === undefined ? "-" : quality}
                     </li>
                     <li>
-                        <strong className="md-strong">Interval: </strong>
-                        {interval === undefined ? "-" : interval}
+                        <strong className="md-strong">Seventh: </strong>
+                        {seventh === undefined ? "-" : seventh}
+                    </li>
+                    <li>
+                        <strong className="md-strong">Ninth: </strong>
+                        {ninth === undefined ? "-" : ninth}
+                    </li>
+                    <li>
+                        <strong className="md-strong">Eleventh: </strong>
+                        {eleventh === undefined ? "-" : eleventh}
+                    </li>
+                    <li>
+                        <strong className="md-strong">Thirteenth: </strong>
+                        {thirteenth === undefined ? "-" : thirteenth}
                     </li>
                     <li>
                         <strong className="md-strong">Added: </strong>
-                        {added === undefined ? "-" : added}
+                        {this.setToString(addeds)}
                     </li>
                     <li>
                         <strong className="md-strong">Suspended: </strong>
-                        {suspended === undefined ? "-" : suspended}
+                        {this.setToString(suspendeds)}
+                    </li>
+                    <li>
+                        <strong className="md-strong">Altered fifth: </strong>
+                        {alteredFifth === undefined ? "-" : alteredFifth}
                     </li>
                     <li>
                         <strong className="md-strong">Bass note: </strong>
@@ -128,10 +155,20 @@ export class AppContainer extends React.PureComponent<{}, IAppState> {
                     </li>
                 </ul>
                 {this.renderReportChordObject()}
+                <h3>Chord structure</h3>
+                <p className="md-running-text">
+                    The chord structure in{" "}
+                    <a target="_blank" href="https://en.wikipedia.org/wiki/Pitch_class#Integer_notation">
+                        integer notation
+                    </a>
+                    .
+                </p>
+                <p className="md-running-text md-code">{this.structureToString(chord.structure)}</p>
+                {this.renderReportChordObject()}
                 <h3>JSON</h3>
                 <p className="md-running-text md-code">{JSON.stringify(chord)}</p>
                 <h3>Name</h3>
-                <p className="md-running-text">{this.chords.print(chord)}</p>
+                <p className="md-running-text">{this.chords.print(chord.symbol)}</p>
                 {this.renderReportChordName()}
             </div>
         );
@@ -156,5 +193,32 @@ export class AppContainer extends React.PureComponent<{}, IAppState> {
         const issueTitleEncoded = encodeURIComponent(issueTitle);
         const issueBodyEncoded = encodeURIComponent(issueBody);
         return `https://github.com/mdanka/momo-chords/issues/new?labels=bug&title=${issueTitleEncoded}&body=${issueBodyEncoded}`;
+    };
+
+    private setToString = (set: Set<any>) => {
+        if (set.size === 0) {
+            return "-";
+        }
+        const values: any[] = [];
+        set.forEach((value: any) => {
+            values.push(value);
+        });
+        return values.join(", ");
+    };
+
+    private structureToString = (structure: IChordStructure) => {
+        const pitches: number[] = [0];
+        if (structure[1]) pitches.push(1);
+        if (structure[2]) pitches.push(2);
+        if (structure[3]) pitches.push(3);
+        if (structure[4]) pitches.push(4);
+        if (structure[5]) pitches.push(5);
+        if (structure[6]) pitches.push(6);
+        if (structure[7]) pitches.push(7);
+        if (structure[8]) pitches.push(8);
+        if (structure[9]) pitches.push(9);
+        if (structure[10]) pitches.push(10);
+        if (structure[11]) pitches.push(11);
+        return `{${pitches.join(", ")}}`;
     };
 }
