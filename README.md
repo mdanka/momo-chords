@@ -1,4 +1,4 @@
-# momo-chords [![NPM Version](https://badge.fury.io/js/momo-chords.svg)](http://badge.fury.io/js/momo-chords) [![Build Status](https://travis-ci.org/mdanka/momo-chords.svg)](https://travis-ci.org/mdanka/momo-chords) [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-typescript-blue.svg)](http://www.typescriptlang.org/)
+# [Momo Chords](https://momo-chords.miklosdanka.com) &middot; [![GitHub license](https://img.shields.io/badge/license-Apache2-blue.svg)](https://github.com/mdanka/momo-chords/blob/master/LICENSE) [![npm version](https://img.shields.io/npm/v/momo-chords.svg?style=flat)](https://www.npmjs.com/package/momo-chords) [![Build Status](https://travis-ci.org/mdanka/momo-chords.svg)](https://travis-ci.org/mdanka/momo-chords) [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-typescript-blue.svg)](http://www.typescriptlang.org/)
 
 Chord parser and printer.
 
