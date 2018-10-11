@@ -1,4 +1,4 @@
-# momo-chords [![NPM Version](https://badge.fury.io/js/momo-chords.svg)](http://badge.fury.io/js/momo-chords)[![Build Status](https://travis-ci.org/mdanka/momo-chords.svg)](https://travis-ci.org/mdanka/momo-chords)[![TypeScript](https://img.shields.io/badge/%3C%2F%3E-typescript-blue.svg)](http://www.typescriptlang.org/)
+# momo-chords [![NPM Version](https://badge.fury.io/js/momo-chords.svg)](http://badge.fury.io/js/momo-chords) [![Build Status](https://travis-ci.org/mdanka/momo-chords.svg)](https://travis-ci.org/mdanka/momo-chords) [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-typescript-blue.svg)](http://www.typescriptlang.org/)
 
 Chord parser and printer.
 
