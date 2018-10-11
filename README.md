@@ -75,12 +75,12 @@ If you also want to customise what should be considered a chord, you can overrid
 
 ### Parsing
 
-#. First, we split the chord string into components using a regular expression generated from the list of all possible chord component names. If the regular expression fails, the string is not a chord.
-#. Next, we check for certain rules regarding the chord components: for example, altered fifths cannot be specified via both `dim` and `b5`, and power chords cannot contain further components. If any of the tests fail, the string is not a chord.
-#. Next, we generate the intervals (notes) in the chord, given the constraints specified by the chord components. If there is no chord satisfying all of the chord components, the string is not a chord.
-#. Finally, we now know that the string is indeed a chord, and we combine the results into a single chord object.
+1. First, we split the chord string into components using a regular expression generated from the list of all possible chord component names. If the regular expression fails, the string is not a chord.
+1. Next, we check for certain rules regarding the chord components: for example, altered fifths cannot be specified via both `dim` and `b5`, and power chords cannot contain further components. If any of the tests fail, the string is not a chord.
+1. Next, we generate the intervals (notes) in the chord, given the constraints specified by the chord components. If there is no chord satisfying all of the chord components, the string is not a chord.
+1. Finally, we now know that the string is indeed a chord, and we combine the results into a single chord object.
 
 ### Printing
 
-#. The naming contains a preferred name for each chord component.
-#. For each chord component, we pick the preferred name, and we concatenate the results.
+1. The naming contains a preferred name for each chord component.
+1. For each chord component, we pick the preferred name, and we concatenate the results.
