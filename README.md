@@ -63,7 +63,7 @@ const myNaming: Partial<INaming> = { ... };
 const chords = new Chords(myNaming);
 ```
 
-You can see the default naming called `DEFAULT_NAMING` in `naming.ts`.
+You can see the default naming called `DEFAULT_NAMING` in [naming.ts](https://github.com/mdanka/momo-chords/blob/master/src/naming.ts#L17).
 
 The naming you provide is a `Partial<INaming>` because you can provide a subset of the naming description. What you provide will be used to override the defaults.
 
