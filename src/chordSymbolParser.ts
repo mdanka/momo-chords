@@ -30,8 +30,8 @@ interface IChordsRegexMatch {
     ninthString: Ninth | undefined;
     eleventhString: Eleventh | undefined;
     thirteenthString: Thirteenth | undefined;
-    addedStrings: Added[];
-    suspendedStrings: Suspended[];
+    addedStrings: (Added | undefined)[];
+    suspendedStrings: (Suspended | undefined)[];
     alteredFifthString: AlteredFifth | undefined;
     bassNoteString: Note | undefined;
 }
@@ -82,10 +82,17 @@ export namespace ChordSymbolParser {
         const thirteenth: Thirteenths | undefined =
             thirteenthString === undefined ? undefined : Naming.thirteenthsLookup.get(thirteenthString);
         const addeds: Set<Addeds> = new Set(
-            addedStrings.map(addedString => Naming.addedsLookup.get(addedString)),
+            addedStrings
+                .map(addedString => (addedString === undefined ? undefined : Naming.addedsLookup.get(addedString)))
+                .filter(value => value !== undefined),
         ) as Set<Addeds>;
         const suspendeds: Set<Suspendeds> = new Set(
-            suspendedStrings.map(suspendedString => Naming.suspendedsLookup.get(suspendedString)),
+            suspendedStrings
+                .map(
+                    suspendedString =>
+                        suspendedString === undefined ? undefined : Naming.suspendedsLookup.get(suspendedString),
+                )
+                .filter(value => value !== undefined),
         ) as Set<Suspendeds>;
         const alteredFifth: AlteredFifths | undefined =
             alteredFifthString === undefined ? undefined : Naming.alteredFifthsLookup.get(alteredFifthString);

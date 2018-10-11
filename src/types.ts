@@ -136,14 +136,7 @@ export interface IChordStructure {
     11: boolean;
 }
 
-export interface IChord extends IChordStructure {
-    /**
-     * The main note
-     */
-    rootNote: Notes;
-
-    /**
-     * For example: C/G
-     */
-    bassNote: Notes | undefined;
+export interface IChord {
+    symbol: IChordSymbol;
+    structure: IChordStructure;
 }
