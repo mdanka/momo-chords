@@ -12,6 +12,7 @@ import {
     IChordStructure,
     IChord,
 } from "./types";
+import { Naming } from "./naming";
 
 interface IConstraint {
     1?: boolean;
@@ -27,18 +28,24 @@ interface IConstraint {
     11?: boolean;
 }
 
-export namespace ChordParser {
-    export function isValidString(value: string): boolean {
-        return parse(value) !== undefined;
+export class ChordParser {
+    private chordSymbolParser: ChordSymbolParser;
+
+    public constructor(naming: Naming) {
+        this.chordSymbolParser = new ChordSymbolParser(naming);
     }
 
-    export function parse(value: string): IChord | undefined {
-        const chordSymbol = ChordSymbolParser.parse(value);
-        return chordSymbol === undefined ? undefined : symbolToChord(chordSymbol);
+    public isValidString(value: string): boolean {
+        return this.parse(value) !== undefined;
     }
 
-    function symbolToChord(chordSymbol: IChordSymbol): IChord | undefined {
-        const structure = symbolToStructure(chordSymbol);
+    public parse(value: string): IChord | undefined {
+        const chordSymbol = this.chordSymbolParser.parse(value);
+        return chordSymbol === undefined ? undefined : this.symbolToChord(chordSymbol);
+    }
+
+    private symbolToChord(chordSymbol: IChordSymbol): IChord | undefined {
+        const structure = this.symbolToStructure(chordSymbol);
         return structure === undefined
             ? undefined
             : {
@@ -47,12 +54,12 @@ export namespace ChordParser {
               };
     }
 
-    function symbolToStructure(chordSymbol: IChordSymbol): IChordStructure | undefined {
-        const constraints = symbolToConstraints(chordSymbol);
-        return resolveConstraints(constraints);
+    private symbolToStructure(chordSymbol: IChordSymbol): IChordStructure | undefined {
+        const constraints = this.symbolToConstraints(chordSymbol);
+        return this.resolveConstraints(constraints);
     }
 
-    function resolveConstraints(constraints: IConstraint[]): IChordStructure | undefined {
+    private resolveConstraints(constraints: IConstraint[]): IChordStructure | undefined {
         const collectedConstraints: Set<boolean | undefined>[] = [];
         for (let i = 0; i < 12; i++) {
             collectedConstraints.push(new Set());
@@ -71,17 +78,17 @@ export namespace ChordParser {
             collectedConstraints[11].add(constraint[11]);
         });
         const chordMaybe = {
-            1: constraintSetToValue(collectedConstraints[1]),
-            2: constraintSetToValue(collectedConstraints[2]),
-            3: constraintSetToValue(collectedConstraints[3]),
-            4: constraintSetToValue(collectedConstraints[4]),
-            5: constraintSetToValue(collectedConstraints[5]),
-            6: constraintSetToValue(collectedConstraints[6]),
-            7: constraintSetToValue(collectedConstraints[7]),
-            8: constraintSetToValue(collectedConstraints[8]),
-            9: constraintSetToValue(collectedConstraints[9]),
-            10: constraintSetToValue(collectedConstraints[10]),
-            11: constraintSetToValue(collectedConstraints[11]),
+            1: this.constraintSetToValue(collectedConstraints[1]),
+            2: this.constraintSetToValue(collectedConstraints[2]),
+            3: this.constraintSetToValue(collectedConstraints[3]),
+            4: this.constraintSetToValue(collectedConstraints[4]),
+            5: this.constraintSetToValue(collectedConstraints[5]),
+            6: this.constraintSetToValue(collectedConstraints[6]),
+            7: this.constraintSetToValue(collectedConstraints[7]),
+            8: this.constraintSetToValue(collectedConstraints[8]),
+            9: this.constraintSetToValue(collectedConstraints[9]),
+            10: this.constraintSetToValue(collectedConstraints[10]),
+            11: this.constraintSetToValue(collectedConstraints[11]),
         };
         if (
             chordMaybe[1] === undefined ||
@@ -113,7 +120,7 @@ export namespace ChordParser {
         };
     }
 
-    function constraintSetToValue(constraintSet: Set<boolean | undefined>) {
+    private constraintSetToValue(constraintSet: Set<boolean | undefined>) {
         if (constraintSet.has(true) && constraintSet.has(false)) {
             return undefined;
         }
@@ -123,21 +130,21 @@ export namespace ChordParser {
         return false;
     }
 
-    function symbolToConstraints(symbol: IChordSymbol) {
+    private symbolToConstraints(symbol: IChordSymbol) {
         const constraints: IConstraint[] = [];
         const { quality, seventh, ninth, eleventh, thirteenth, addeds, suspendeds, alteredFifth } = symbol;
         const isExtended =
             seventh !== undefined || ninth !== undefined || eleventh !== undefined || thirteenth !== undefined;
-        const qualityConstraints = isExtended ? qualityExtendedConstraints : qualityBasicConstraints;
+        const qualityConstraints = isExtended ? this.qualityExtendedConstraints : this.qualityBasicConstraints;
 
-        constraints.push(getConstraint(quality, qualityConstraints));
-        constraints.push(getConstraint(seventh, seventhConstraints));
-        constraints.push(getConstraint(ninth, ninthConstraints));
-        constraints.push(getConstraint(eleventh, eleventhConstraints));
-        constraints.push(getConstraint(thirteenth, thirteenthConstraints));
-        constraints.push(...getConstraintsForSet(addeds, addedConstraints));
-        constraints.push(...getConstraintsForSet(suspendeds, suspendedConstraints));
-        constraints.push(getConstraint(alteredFifth, alteredFifthConstraints));
+        constraints.push(this.getConstraint(quality, qualityConstraints));
+        constraints.push(this.getConstraint(seventh, this.seventhConstraints));
+        constraints.push(this.getConstraint(ninth, this.ninthConstraints));
+        constraints.push(this.getConstraint(eleventh, this.eleventhConstraints));
+        constraints.push(this.getConstraint(thirteenth, this.thirteenthConstraints));
+        constraints.push(...this.getConstraintsForSet(addeds, this.addedConstraints));
+        constraints.push(...this.getConstraintsForSet(suspendeds, this.suspendedConstraints));
+        constraints.push(this.getConstraint(alteredFifth, this.alteredFifthConstraints));
 
         /**
          * If the quality is not defined and the chord is extended, then
@@ -180,15 +187,15 @@ export namespace ChordParser {
         return constraints;
     }
 
-    function getConstraintsForSet<T>(symbols: Set<T>, lookup: Map<T, IConstraint>) {
+    private getConstraintsForSet<T>(symbols: Set<T>, lookup: Map<T, IConstraint>) {
         const constraints: IConstraint[] = [];
         symbols.forEach((symbol: T) => {
-            constraints.push(getConstraint(symbol, lookup));
+            constraints.push(this.getConstraint(symbol, lookup));
         });
         return constraints;
     }
 
-    function getConstraint<T>(symbol: T | undefined, lookup: Map<T, IConstraint>) {
+    private getConstraint<T>(symbol: T | undefined, lookup: Map<T, IConstraint>) {
         if (symbol === undefined) {
             return {};
         }
@@ -199,7 +206,7 @@ export namespace ChordParser {
         return constraint;
     }
 
-    const qualityBasicConstraints: Map<Qualities, IConstraint> = new Map([
+    private qualityBasicConstraints: Map<Qualities, IConstraint> = new Map([
         [Qualities.Major, { 4: true }],
         [Qualities.Minor, { 3: true }],
         [Qualities.MinorMajor, undefined],
@@ -225,7 +232,7 @@ export namespace ChordParser {
         ],
     ] as [Qualities, IConstraint][]);
 
-    const qualityExtendedConstraints: Map<Qualities, IConstraint> = new Map([
+    private qualityExtendedConstraints: Map<Qualities, IConstraint> = new Map([
         [Qualities.Major, { 11: true }], // third not specified because it might be a suspended chord
         [Qualities.Minor, { 3: true, 10: true }],
         [Qualities.MinorMajor, { 3: true, 11: true }],
@@ -251,42 +258,42 @@ export namespace ChordParser {
         ],
     ] as [Qualities, IConstraint][]);
 
-    const seventhConstraints: Map<Sevenths, IConstraint> = new Map([[Sevenths.Seventh, {}]] as [
+    private seventhConstraints: Map<Sevenths, IConstraint> = new Map([[Sevenths.Seventh, {}]] as [
         Sevenths,
         IConstraint
     ][]);
 
-    const ninthConstraints: Map<Ninths, IConstraint> = new Map([
+    private ninthConstraints: Map<Ninths, IConstraint> = new Map([
         [Ninths.Major9, { 2: true }],
         [Ninths.Minor9, { 1: true }],
         [Ninths.Sharpened9, { 3: true }],
     ] as [Ninths, IConstraint][]);
 
-    const eleventhConstraints: Map<Elevenths, IConstraint> = new Map([
+    private eleventhConstraints: Map<Elevenths, IConstraint> = new Map([
         [Elevenths.Perfect11, { 5: true }],
         [Elevenths.Sharpened11, { 6: true }],
         [Elevenths.Flattened11, { 4: true }],
     ] as [Elevenths, IConstraint][]);
 
-    const thirteenthConstraints: Map<Thirteenths, IConstraint> = new Map([
+    private thirteenthConstraints: Map<Thirteenths, IConstraint> = new Map([
         [Thirteenths.Major13, { 9: true }],
         [Thirteenths.Minor13, { 8: true }],
     ] as [Thirteenths, IConstraint][]);
 
-    const addedConstraints: Map<Addeds, IConstraint> = new Map([
+    private addedConstraints: Map<Addeds, IConstraint> = new Map([
         [Addeds.Add9, { 2: true }],
         [Addeds.Add11, { 5: true }],
         [Addeds.Add13, { 9: true }],
     ] as [Addeds, IConstraint][]);
 
     // Suspendeds disallow the minor/major third
-    const suspendedConstraints: Map<Suspendeds, IConstraint> = new Map([
+    private suspendedConstraints: Map<Suspendeds, IConstraint> = new Map([
         [Suspendeds.Sus4, { 3: false, 4: false, 5: true }],
         [Suspendeds.Sus2, { 2: true, 3: false, 4: false }],
     ] as [Suspendeds, IConstraint][]);
 
     // Altered fifths disallow the perfect fifth
-    const alteredFifthConstraints: Map<AlteredFifths, IConstraint> = new Map([
+    private alteredFifthConstraints: Map<AlteredFifths, IConstraint> = new Map([
         [AlteredFifths.Sharpened5, { 7: false, 8: true }],
         [AlteredFifths.Flattened5, { 6: true, 7: false }],
     ] as [AlteredFifths, IConstraint][]);

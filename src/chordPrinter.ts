@@ -1,8 +1,14 @@
 import { IChordSymbol, addedOrder, suspendedOrder } from "./types";
 import { Naming } from "./naming";
 
-export namespace ChordPrinter {
-    export function print(chordSymbol: IChordSymbol): string {
+export class ChordPrinter {
+    private naming: Naming;
+
+    public constructor(naming: Naming) {
+        this.naming = naming;
+    }
+
+    public print(chordSymbol: IChordSymbol): string {
         const {
             rootNote,
             quality,
@@ -18,42 +24,39 @@ export namespace ChordPrinter {
 
         let name: string = "";
         name += rootNote;
-        name += getSymbolText(quality, Naming.qualities);
-        name += getSymbolText(seventh, Naming.sevenths);
-        name += getSymbolText(ninth, Naming.ninths);
-        name += getSymbolText(eleventh, Naming.elevenths);
-        name += getSymbolText(thirteenth, Naming.thirteenths);
-        name += getSymbolTextForSet(addeds, addedOrder, Naming.addeds);
-        name += getSymbolTextForSet(suspendeds, suspendedOrder, Naming.suspendeds);
-        name += getSymbolText(alteredFifth, Naming.alteredFifths);
+        name += this.getSymbolText(quality, this.naming.preferredNames.qualities);
+        name += this.getSymbolText(seventh, this.naming.preferredNames.sevenths);
+        name += this.getSymbolText(ninth, this.naming.preferredNames.ninths);
+        name += this.getSymbolText(eleventh, this.naming.preferredNames.elevenths);
+        name += this.getSymbolText(thirteenth, this.naming.preferredNames.thirteenths);
+        name += this.getSymbolTextForSet(addeds, addedOrder, this.naming.preferredNames.addeds);
+        name += this.getSymbolTextForSet(suspendeds, suspendedOrder, this.naming.preferredNames.suspendeds);
+        name += this.getSymbolText(alteredFifth, this.naming.preferredNames.alteredFifths);
         if (bassNote !== undefined) {
             name += "/" + bassNote;
         }
         return name;
     }
 
-    function getSymbolTextForSet<T>(symbolSet: Set<T>, symbolOrder: T[], naming: Map<T, string[]>) {
+    private getSymbolTextForSet<T>(symbolSet: Set<T>, symbolOrder: T[], naming: Map<T, string>) {
         return symbolOrder
             .map(symbol => {
                 if (symbolSet.has(symbol)) {
-                    return getSymbolText(symbol, naming);
+                    return this.getSymbolText(symbol, naming);
                 }
             })
             .filter(value => value !== undefined)
             .join("");
     }
 
-    function getSymbolText<T>(symbol: T | undefined, naming: Map<T, string[]>) {
+    private getSymbolText<T>(symbol: T | undefined, naming: Map<T, string>) {
         if (symbol === undefined) {
             return "";
         }
-        const names = naming.get(symbol);
-        if (names === undefined) {
-            throw new Error(`[Chords] No name found for symbol '${symbol}'`);
+        const name = naming.get(symbol);
+        if (name === undefined) {
+            throw new Error(`[Chords] No preferred name found for symbol '${symbol}'`);
         }
-        if (names.length === 0) {
-            throw new Error(`[Chords] Name list found for symbol '${symbol}' is empty`);
-        }
-        return names[0];
+        return name;
     }
 }

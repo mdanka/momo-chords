@@ -1,17 +1,27 @@
-import { IChordSymbol, IChord } from "./types";
+import { IChordSymbol, IChord, INaming } from "./types";
 import { ChordPrinter } from "./chordPrinter";
 import { ChordParser } from "./chordParser";
+import { Naming } from "./naming";
 
 export class Chords {
+    private chordParser: ChordParser;
+    private chordPrinter: ChordPrinter;
+
+    public constructor(namingOverride?: Partial<INaming>) {
+        const naming = new Naming(namingOverride);
+        this.chordParser = new ChordParser(naming);
+        this.chordPrinter = new ChordPrinter(naming);
+    }
+
     public parse = (value: string): IChord | undefined => {
-        return ChordParser.parse(value);
+        return this.chordParser.parse(value);
     };
 
     public isChord = (value: string): boolean => {
-        return ChordParser.isValidString(value);
+        return this.chordParser.isValidString(value);
     };
 
     public print = (chord: IChordSymbol): string => {
-        return ChordPrinter.print(chord);
+        return this.chordPrinter.print(chord);
     };
 }

@@ -163,7 +163,7 @@ export class Naming {
         alteredFifths: Map<string, AlteredFifths>;
     };
 
-    public constructor(namingOverride: Partial<INaming>) {
+    public constructor(namingOverride?: Partial<INaming>) {
         this.naming = {
             ...DEFAULT_NAMING,
             ...namingOverride,
