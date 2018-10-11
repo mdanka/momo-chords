@@ -70,3 +70,17 @@ The naming you provide is a `Partial<INaming>` because you can provide a subset 
 If you want to update just how chords should be printed, then it is enough to override only the `printing` key of the naming. `printing` contains a preferred name for each chord part.
 
 If you also want to customise what should be considered a chord, you can override the `parsing` key of the naming. `parsing` contains a list of all possible names for each chord part.
+
+## How it works
+
+### Parsing
+
+#. First, we split the chord string into components using a regular expression generated from the list of all possible chord component names. If the regular expression fails, the string is not a chord.
+#. Next, we check for certain rules regarding the chord components: for example, altered fifths cannot be specified via both `dim` and `b5`, and power chords cannot contain further components. If any of the tests fail, the string is not a chord.
+#. Next, we generate the intervals (notes) in the chord, given the constraints specified by the chord components. If there is no chord satisfying all of the chord components, the string is not a chord.
+#. Finally, we now know that the string is indeed a chord, and we combine the results into a single chord object.
+
+### Printing
+
+#. The naming contains a preferred name for each chord component.
+#. For each chord component, we pick the preferred name, and we concatenate the results.
