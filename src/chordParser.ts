@@ -28,13 +28,30 @@ interface IConstraint {
 }
 
 export namespace ChordParser {
-    export function parseSymbol(chordSymbol: IChordSymbol): IChord | undefined {
-        return symbolToChord(chordSymbol);
+    export function isValidString(value: string): boolean {
+        return parseStringToChord(value) !== undefined;
     }
 
-    export function parseString(value: string): IChord | undefined {
+    export function isValidSymbol(chordSymbol: IChordSymbol): boolean {
+        return parseSymbolToChord(chordSymbol) !== undefined;
+    }
+
+    export function parseStringToChord(value: string): IChord | undefined {
         const chordSymbol = ChordSymbolParser.parse(value);
-        return chordSymbol === undefined ? undefined : parseSymbol(chordSymbol);
+        return chordSymbol === undefined ? undefined : parseSymbolToChord(chordSymbol);
+    }
+
+    export function parseStringToSymbol(value: string): IChordSymbol | undefined {
+        const chordSymbol = ChordSymbolParser.parse(value);
+        if (chordSymbol === undefined) {
+            return undefined;
+        }
+        const isValid = ChordParser.isValidSymbol(chordSymbol);
+        return isValid ? chordSymbol : undefined;
+    }
+
+    export function parseSymbolToChord(chordSymbol: IChordSymbol): IChord | undefined {
+        return symbolToChord(chordSymbol);
     }
 
     function symbolToChord(chordSymbol: IChordSymbol): IChord | undefined {

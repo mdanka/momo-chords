@@ -107,10 +107,6 @@ export interface IChordSymbol extends IChordSymbolStructure {
     bassNote: Notes | undefined;
 }
 
-export interface INamedChordSymbol extends IChordSymbol {
-    name: string;
-}
-
 /**
  * The chord structure uses the integer notation.
  *
@@ -150,8 +146,4 @@ export interface IChord extends IChordStructure {
      * For example: C/G
      */
     bassNote: Notes | undefined;
-}
-
-export interface INamedChord extends IChord {
-    name: string;
 }

@@ -1,19 +1,18 @@
 import { IChordSymbol, IChord } from "./types";
-import { ChordSymbolParser } from "./chordSymbolParser";
 import { ChordPrinter } from "./chordPrinter";
 import { ChordParser } from "./chordParser";
 
 export class Chords {
     public parseSymbol = (value: string): IChordSymbol | undefined => {
-        return ChordSymbolParser.parse(value);
+        return ChordParser.parseStringToSymbol(value);
     };
 
     public parseChord = (value: string): IChord | undefined => {
-        return ChordParser.parseString(value);
+        return ChordParser.parseStringToChord(value);
     };
 
     public isChord = (value: string): boolean => {
-        return this.parseChord(value) !== undefined;
+        return ChordParser.isValidString(value);
     };
 
     public print = (chord: IChordSymbol): string => {
