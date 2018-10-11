@@ -48,7 +48,36 @@ export namespace ChordSymbolParser {
 
     export function parse(value: string): IChordSymbol | undefined {
         const regexResult = matchChordsRegex(value);
-        return chordsRegexMatchToChord(regexResult);
+        const symbol = chordsRegexMatchToChord(regexResult);
+        if (symbol === undefined) {
+            return undefined;
+        }
+        const isValid = isSymbolValid(symbol);
+        return isValid ? symbol : undefined;
+    }
+
+    function isSymbolValid(chordSymbol: IChordSymbol): boolean {
+        const { quality, seventh, ninth, eleventh, thirteenth, addeds, suspendeds, alteredFifth } = chordSymbol;
+        /**
+         * The alteredFifth cannot appear at the same time with fifth-altering qualities.
+         * For example, no Cdimb5
+         */
+        const isAlteredFifthOk =
+            alteredFifth === undefined ||
+            new Set([undefined, Qualities.Major, Qualities.Minor, Qualities.MinorMajor, Qualities.Power]).has(quality);
+        /**
+         * The power chord cannot appear with other modifiers.
+         */
+        const isPowerChordOk =
+            quality !== Qualities.Power ||
+            (seventh === undefined &&
+                ninth === undefined &&
+                eleventh === undefined &&
+                thirteenth === undefined &&
+                addeds.size === 0 &&
+                suspendeds.size === 0 &&
+                alteredFifth === undefined);
+        return isAlteredFifthOk && isPowerChordOk;
     }
 
     function chordsRegexMatchToChord(result: IChordsRegexMatch | undefined): IChordSymbol | undefined {

@@ -402,5 +402,5 @@ export namespace TestData {
         },
     ];
 
-    export const incorrectNames: string[] = ["", "T", "Ah", "Cb", "E#"];
+    export const incorrectNames: string[] = ["", "T", "Ah", "Cb", "E#", "Cdim#5", "Caugb5", "E57", "Em5", "E5b5"];
 }
