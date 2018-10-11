@@ -53,3 +53,24 @@ const chord = chords.parse("A#M7/G");  // chord object
 // Print the name of a chord
 chords.print(chord.symbol);  // "A#maj7/G"
 ```
+
+### Custom namings
+
+The library comes with a comprehensive set of default chord names. However, you might wish to customize what should be considered a chord and/or how a chord should be printed. This is possible to do why namings.
+
+In order to apply a custom naming, simply provide a naming description to the constructor:
+
+```TypeScript
+import { Chords, INaming } from "momo-chords";
+
+const myNaming: Partial<INaming> = { ... };
+const chords = new Chords(myNaming);
+```
+
+You can see the default naming called `DEFAULT_NAMING` in `naming.ts`.
+
+The naming you provide is a `Partial<INaming>` because you can provide a subset of the naming description. What you provide will be used to override the defaults.
+
+If you want to update just how chords should be printed, then it is enough to override only the `printing` key of the naming. `printing` contains a preferred name for each chord part.
+
+If you also want to customise what should be considered a chord, you can override the `parsing` key of the naming. `parsing` contains a list of all possible names for each chord part.
