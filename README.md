@@ -20,8 +20,8 @@ Currently it supports:
 - [x] Parsing strings as chord symbols
 - [x] Parsing strings as chord notes
 - [x] Printing chord names when given a chord
-- [x] An even larger set of chords
-- [ ] Configurable naming strategies
+- [x] An even larger set of chords (added in 0.3.0)
+- [x] Configurable naming strategies (added in 0.4.0)
 - [ ] Autocomplete/search by name
 
 ## Installation
