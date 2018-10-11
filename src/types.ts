@@ -140,3 +140,28 @@ export interface IChord {
     symbol: IChordSymbol;
     structure: IChordStructure;
 }
+
+export interface INaming {
+    parsing: {
+        notes: [Notes, string[]][];
+        qualities: [Qualities, string[]][];
+        sevenths: [Sevenths, string[]][];
+        ninths: [Ninths, string[]][];
+        elevenths: [Elevenths, string[]][];
+        thirteenths: [Thirteenths, string[]][];
+        addeds: [Addeds, string[]][];
+        suspendeds: [Suspendeds, string[]][];
+        alteredFifths: [AlteredFifths, string[]][];
+    };
+    printing: {
+        notes: [Notes, string][];
+        qualities: [Qualities, string][];
+        sevenths: [Sevenths, string][];
+        ninths: [Ninths, string][];
+        elevenths: [Elevenths, string][];
+        thirteenths: [Thirteenths, string][];
+        addeds: [Addeds, string][];
+        suspendeds: [Suspendeds, string][];
+        alteredFifths: [AlteredFifths, string][];
+    };
+}
