@@ -17,9 +17,10 @@ The goal of this library is to support all of the above.
 Currently it supports:
 
 - [x] A very large set of chords
-- [x] Parsing strings as chords
+- [x] Parsing strings as chord symbols
+- [x] Parsing strings as chord notes
 - [x] Printing chord names when given a chord
-- [ ] An even larger set of chords
+- [x] An even larger set of chords
 - [ ] Configurable naming strategies
 - [ ] Autocomplete/search by name
 
@@ -50,5 +51,5 @@ chords.isChord("T");  // false
 const chord = chords.parse("A#M7/G");  // chord object
 
 // Print the name of a chord
-chords.print(chord);  // "A#maj7/G"
+chords.print(chord.symbol);  // "A#maj7/G"
 ```
