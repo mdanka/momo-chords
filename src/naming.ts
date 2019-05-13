@@ -11,6 +11,8 @@ import {
     INaming,
 } from "./types";
 
+const merge = require("lodash.merge");
+
 const majorSymbols = ["maj", "major", "Maj", "M", "Δ"];
 const minorSymbols = ["m", "minor", "min", "−", "-"];
 const augmentedSymbols = ["aug", "augmented", "+"];
@@ -164,10 +166,7 @@ export class Naming {
     };
 
     public constructor(namingOverride?: Partial<INaming>) {
-        this.naming = {
-            ...DEFAULT_NAMING,
-            ...namingOverride,
-        };
+        this.naming = merge(DEFAULT_NAMING, namingOverride);
         this.names = {
             notes: new Map(this.naming.parsing.notes),
             qualities: new Map(this.naming.parsing.qualities),
