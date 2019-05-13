@@ -95,7 +95,7 @@ const DEFAULT_NAMING: INaming = {
         ninths: [[Ninths.Major9, "9"], [Ninths.Minor9, "b9"], [Ninths.Sharpened9, "#9"]],
         elevenths: [[Elevenths.Perfect11, "11"], [Elevenths.Sharpened11, "#11"], [Elevenths.Flattened11, "b11"]],
         thirteenths: [[Thirteenths.Major13, "13"], [Thirteenths.Minor13, "b13"]],
-        addeds: [[Addeds.Add9, "add9"], [Addeds.Add11, "add11"], [Addeds.Add13, "add13"]],
+        addeds: [[Addeds.Add9, "2"], [Addeds.Add11, "4"], [Addeds.Add13, "6"]],
         suspendeds: [[Suspendeds.Sus4, "sus4"], [Suspendeds.Sus2, "sus2"]],
         alteredFifths: [[AlteredFifths.Sharpened5, "#5"], [AlteredFifths.Flattened5, "b5"]],
     },
