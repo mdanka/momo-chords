@@ -35,8 +35,6 @@
         "url": "https://github.com/mdanka/momo-chords/issues"
     },
     "dependencies": {
-        "@types/lodash.merge": "^4.6.6",
-        "@types/node": "^12.0.0",
         "commonjs": "^0.0.1",
         "es6-shim": "^0.35.3",
         "lodash.merge": "^4.6.1"
@@ -44,7 +42,9 @@
     "devDependencies": {
         "@types/chai": "^3.4.35",
         "@types/es6-shim": "^0.31.33",
+        "@types/lodash.merge": "^4.6.6",
         "@types/mocha": "^2.2.40",
+        "@types/node": "^12.0.0",
         "awesome-typescript-loader": "^3.1.2",
         "chai": "^3.5.0",
         "karma": "^1.5.0",
