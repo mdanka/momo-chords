@@ -25,7 +25,7 @@
     "@mdanka/glass-ui": "^0.3.0",
     "classnames": "^2.2.5",
     "es6-shim": "^0.35.3",
-    "lodash": "^4.2.0",
+    "lodash": "^4.17.19",
     "momo-chords": "^0.3.0",
     "react": "^16.5.2",
     "react-addons-css-transition-group": "^15.6.2",
